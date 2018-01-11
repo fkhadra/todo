@@ -1,0 +1,23 @@
+{
+  "name": "toodos",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "glamor": "^2.20.40",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.0.17",
+    "react-toastify": "^3.2.2"
+  },
+  "scripts": {
+    "start": "npm run mklink && react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "mklink": "ln -snf `pwd`/src node_modules/src",
+    "prettier": "prettier --single-quote --write src/**/*.js"
+  },
+  "devDependencies": {
+    "prettier": "^1.10.2"
+  }
+}
