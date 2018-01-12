@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
+import { css } from 'glamor';
 
-import Checkmark from './Checkmark';
+import Todo from './Todo';
 import TodoInput from './TodoInput';
 
+const styles = {
+  list: css({
+    listStyle: 'none',
+    padding: 0
+  })
+};
 export default class TodoList extends Component {
   state = {
     todos: []
@@ -10,17 +17,23 @@ export default class TodoList extends Component {
 
   componentDidMount() {
     this.props.todoStore.onChange(todos => {
-      this.setState({ todos: todos })
+      this.setState({ todos: todos });
     });
   }
-  
-  renderTodos(){
-    return this.state.todos.map( ({ id, done, value }) => (
-      <li key={id}>
-        <Checkmark checked={done} />
-        <span>{value}</span>
+
+  renderTodos() {
+    const { toggleDone, updateTodo, removeTodo } = this.props.todoStore;
+
+    return this.state.todos.map(todo => (
+      <li key={todo.id}>
+        <Todo
+          todo={todo}
+          toggleDone={toggleDone}
+          updateTodo={updateTodo}
+          removeTodo={removeTodo}
+        />
       </li>
-    ))
+    ));
   }
 
   render() {
@@ -29,10 +42,10 @@ export default class TodoList extends Component {
     return (
       <section>
         <h2>{title}</h2>
-        <p>
+        <div>
           <TodoInput addTodo={todoStore.addTodo} />
-          {this.renderTodos()}
-        </p>
+          <ul {...styles.list}>{this.renderTodos()}</ul>
+        </div>
       </section>
     );
   }

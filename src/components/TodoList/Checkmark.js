@@ -21,13 +21,17 @@ const animations = {
   path: {
     strokeDasharray: '1000',
     strokeDashoffset: '0'
-  }
+  },
 };
 
 const styles = {
-  circle: css(animations.path, {
+  circle: checked => checked ? css(animations.path, {
+    stroke: "#73AF55" ,
     animation: `${animations.dash} 0.9s ease-in-out`
-  }),
+  }) : css(animations.path, {
+    stroke: "#ffffff",
+    animation: `${animations.dash} 0.9s ease-in-out`
+  }) ,
   check: css(animations.path, {
     strokeDashoffset: -100,
     animation: `${animations.check} 0.9s 0.35s ease-in-out forwards`
@@ -42,9 +46,8 @@ const Checkmark = ({ checked }) => (
     width="20"
   >
     <circle
-      {...styles.circle}
+      {...styles.circle(checked)}
       fill="none"
-      stroke="#73AF55"
       strokeWidth="6"
       strokeMiterlimit="10"
       cx="65.1"

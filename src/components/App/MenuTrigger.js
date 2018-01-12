@@ -3,12 +3,13 @@ import { css } from 'glamor';
 
 const style = isOpen =>
   css({
-    fontSize: '1.4rem',
+    fontSize: '1rem',
     position: 'relative',
     display: 'inline-block',
     width: '2em',
     height: '2em',
     cursor: 'pointer',
+    margin: '0 15px',
     '& span': {
       position: 'absolute',
       top: '50%',
