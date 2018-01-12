@@ -3,3 +3,13 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+button:focus{
+  outline: none;
+}
+html {
+  background: #333;
+  color: #ffffff;
+  text-align: center;
+  padding: 5%;
+}

@@ -6,6 +6,7 @@
     "glamor": "^2.20.40",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
     "react-toastify": "^3.2.2"
   },
