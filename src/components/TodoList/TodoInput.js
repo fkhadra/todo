@@ -62,8 +62,10 @@ export default class TodoInput extends Component {
     });
 
   handleSubmit = e => {
-    if (e.which === keys.ENTER) {
-      this.props.addTodo({ value: this.state.inputValue });
+    const value = this.state.inputValue.trim()
+    
+    if (e.which === keys.ENTER && value.length) {
+      this.props.addTodo({ value });
       this.clearInput();
     } else if (e.which === keys.ESCAPE) {
       this.clearInput();
@@ -87,7 +89,6 @@ export default class TodoInput extends Component {
             src={clearIcon}
             alt="input"
             onClick={this.clearInput}
-            
           />
         ) : (
           <img {...styles.icon} src={editIcon} alt="input" />

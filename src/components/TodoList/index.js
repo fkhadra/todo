@@ -29,8 +29,7 @@ const animations = {
     to: {
       opacity: 0
     }
-  }),
-
+  })
 };
 
 const styles = {
@@ -43,15 +42,24 @@ const styles = {
     animationDuration: '0.75s',
     animationName: animations.slideInLeft
   }),
-  exit: height => css({
-    animationFillMode: 'both',
-    animationDuration: '0.75s',
-    animationName: animations.zoomOut,
-    transition: 'max-height 0.75s, opacity 0.75s',
-    maxHeight: height,
-    overflow: 'hidden',
-  })
+  exit: height =>
+    css({
+      animationFillMode: 'both',
+      animationDuration: '0.75s',
+      animationName: animations.zoomOut,
+      transition: 'max-height 0.75s, opacity 0.75s',
+      maxHeight: height,
+      overflow: 'hidden'
+    }),
+  onExit: node => {
+    node.classList.add(styles.exit(`${node.offsetHeight}px`));
+    requestAnimationFrame(() => {
+      node.style.maxHeight = '0';
+      node.style.opacity = '0';
+    });
+  }
 };
+
 export default class TodoList extends Component {
   state = {
     todos: []
@@ -63,35 +71,16 @@ export default class TodoList extends Component {
     });
   }
 
-  ext = el => {
-    const timing = '0.75s';
-    const height = el.offsetHeight + 'px';
-   
-   
-    el.classList.add(styles.exit(height));
-    // Begin transition
-    // var endSlideDown = function() {
-    //   el.style.removeProperty('-webkit-transition');
-    //   el.style.removeProperty('transition');
-    //   el.removeEventListener(transitionEvent('end'), endSlideDown);
-    // };
-    requestAnimationFrame(function() {
-      el.style.maxHeight = '0';
-      el.style.opacity = '0';
-    });
-  }
-
   renderTodos() {
     const { toggleDone, updateTodo, removeTodo } = this.props.todoStore;
 
     return this.state.todos.map(todo => (
-      <Transition 
-      key={todo.id}
-      timeout={750}
-      onEnter={node => node.classList.add(styles.enter)}
-      onEntered={node => node.classList.remove(styles.enter)}
-      onExit={this.ext}
-      
+      <Transition
+        key={todo.id}
+        timeout={750}
+        onEnter={node => node.classList.add(styles.enter)}
+        onEntered={node => node.classList.remove(styles.enter)}
+        onExit={styles.onExit}
       >
         <li>
           <Todo
