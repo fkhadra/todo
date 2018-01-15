@@ -3,6 +3,7 @@ import EventEmitter from './EventEmitter';
 
 class TodoStore extends EventEmitter {
   collection = [];
+  done = 0;
 
   onChange(cb) {
     return this.on(this.events.ON_CHANGE, cb);
@@ -15,6 +16,13 @@ class TodoStore extends EventEmitter {
 
   get collection() {
     return this._collection;
+  }
+
+  getDone(){
+    return {
+      number: this.done,
+      percentage: (this.done / this.collection.length) * 100
+    }
   }
 
   addTodo = payload => {
@@ -36,10 +44,14 @@ class TodoStore extends EventEmitter {
   };
 
   toggleDone = id => {
+    this.done = 0;
     this.collection = this.collection.map(todo => {
       if (todo.id === id) {
         todo.done = !todo.done;
       }
+
+      todo.done && this.done++
+
       return todo;
     });
   };
