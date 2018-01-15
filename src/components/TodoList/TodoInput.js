@@ -4,6 +4,8 @@ import { css } from 'glamor';
 import editIcon from 'src/assets/edit.svg';
 import clearIcon from 'src/assets/clear.svg';
 
+import { keys } from 'src/utils';
+
 const styles = {
   group: css({
     position: 'relative',
@@ -42,11 +44,6 @@ const styles = {
   clear: css({
     top: '18%'
   })
-};
-
-const keys = {
-  ENTER: 13,
-  ESCAPE: 27
 };
 
 export default class TodoInput extends Component {
