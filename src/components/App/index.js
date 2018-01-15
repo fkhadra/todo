@@ -13,6 +13,7 @@ const styles = {
     left: 0,
     width: '100%',
     background: 'linear-gradient(to right, #16bffd, #cb3066)',
+    zIndex: 3,
     '& nav': {
       display: 'flex',
       alignItems: 'center',
@@ -68,12 +69,12 @@ export default class App extends Component {
             </ul>
           </nav>
         </aside>
-        <main {...styles.main}>
+        <section {...styles.main}>
           <TodoList 
             title="Fucking tofos" 
             todoStore={TodoStore}
           />
-        </main>
+        </section>
         <footer {...styles.footer}>FOOTER</footer>
       </Fragment>
     );

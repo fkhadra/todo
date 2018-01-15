@@ -6,12 +6,15 @@ import deleteIcon from 'src/assets/delete.svg';
 
 import { keys } from 'src/utils';
 
+
 const styles = {
   container: css({
     display: 'flex',
     justifyItems: 'center',
     alignItems: 'center',
-    background: '#000000',
+    // background: '#000000',
+    //backgroundColor: '#262a33',
+    border: 'solid 1px #424545',
     '& img': {
       display: 'none'
     },
@@ -49,6 +52,7 @@ export default class Todo extends Component {
       editing: false,
       inputValue: props.todo.value
     };
+    this.touchTimer = null;
   }
 
   onFocus = e => {
@@ -80,6 +84,15 @@ export default class Todo extends Component {
     this.setState({ inputValue: e.target.value });
   };
 
+  handleTouchStart = e => {
+    console.log('touch Start');
+    this.touchTimer = setTimeout(() => {
+      console.log('long touch');
+    }, 800);
+  };
+
+  handleTouchEnd = () => this.touchTimer && clearTimeout(this.touchTimer);
+
   render() {
     const { done, value } = this.props.todo;
     return (
@@ -98,7 +111,13 @@ export default class Todo extends Component {
             autoFocus
           />
         ) : (
-          <span onDoubleClick={this.toggleEdit}>{value}</span>
+          <span
+            onDoubleClick={this.toggleEdit}
+            onTouchStart={this.handleTouchStart}
+            onTouchEnd={this.handleTouchEnd}
+          >
+            {value}
+          </span>
         )}
         <img src={deleteIcon} alt="delete" onClick={this.remove} />
       </article>
