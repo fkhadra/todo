@@ -6,15 +6,12 @@ import deleteIcon from 'src/assets/delete.svg';
 
 import { keys } from 'src/utils';
 
-
 const styles = {
   container: css({
     display: 'flex',
     justifyItems: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    // background: '#000000',
-    //backgroundColor: '#262a33',
-    border: 'solid 1px #424545',
     '& img': {
       display: 'none'
     },
@@ -35,13 +32,33 @@ const styles = {
       textAlign: 'left'
     },
     '& input:focus': {
-      background: '#6c6e6f',
+      // background: '#6c6e6f',
       outline: 'none',
       caretColor: '#0cc10c'
     }
   }),
+  content: done =>
+    css({
+      position: 'relative',
+      opacity: done ? 0.5 : 1,
+      textAlign: 'left',
+      ':after': {
+        content: '""',
+        position: 'absolute',
+        display: 'block',
+        width: '100%',
+        height: '2px',
+        top: '48%',
+        borderRadius: '1px',
+        background: 'purple',
+        transformOrigin: done ? 'center left' : 'center right',
+        transform: done ? 'scaleX(1)' : 'scaleX(0)',
+        transition: 'transform 0.5s cubic-bezier(0.55, 0, 0.1, 1)'
+      }
+    }),
   delete: css({
-    cursor: 'pointer'
+    cursor: 'pointer',
+    alignSelf: 'end'
   })
 };
 
@@ -111,15 +128,20 @@ export default class Todo extends Component {
             autoFocus
           />
         ) : (
-          <span
-            onDoubleClick={this.toggleEdit}
-            onTouchStart={this.handleTouchStart}
-            onTouchEnd={this.handleTouchEnd}
-          >
-            {value}
-          </span>
+          <div>
+            <span
+              {...styles.content(done)}
+              onDoubleClick={this.toggleEdit}
+              onTouchStart={this.handleTouchStart}
+              onTouchEnd={this.handleTouchEnd}
+            >
+              {value}
+            </span>
+          </div>
         )}
-        <img src={deleteIcon} alt="delete" onClick={this.remove} />
+        <div>
+          <img src={deleteIcon} alt="delete" onClick={this.remove} />
+        </div>
       </article>
     );
   }

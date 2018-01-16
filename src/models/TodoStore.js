@@ -11,6 +11,8 @@ class TodoStore extends EventEmitter {
 
   set collection(item) {
     this._collection = item;
+    this.done = 0 ;
+    item.forEach( todo => todo.done && this.done++);
     this.dispatch(this.events.ON_CHANGE, this._collection);
   }
 
@@ -44,14 +46,10 @@ class TodoStore extends EventEmitter {
   };
 
   toggleDone = id => {
-    this.done = 0;
     this.collection = this.collection.map(todo => {
       if (todo.id === id) {
         todo.done = !todo.done;
       }
-
-      todo.done && this.done++
-
       return todo;
     });
   };
