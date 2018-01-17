@@ -1,87 +1,13 @@
 import React, { Component } from 'react';
-import { css, keyframes } from 'glamor';
 import { TransitionGroup, Transition } from 'react-transition-group';
 
+import styles from './styles';
 import Todo from './Todo';
 import TodoInput from './TodoInput';
 
-const animations = {
-  slideInLeft: keyframes({
-    from: {
-      transform: 'translate3d(-100%, 0, 0)',
-      opacity: 0
-    },
-    to: {
-      opacity: 1,
-      transform: 'none'
-    }
-  }),
-  zoomOut: keyframes({
-    from: {
-      opacity: 1
-    },
-
-    '50%': {
-      opacity: 0,
-      transform: 'scale3d(.3, .3, .3)'
-    },
-
-    to: {
-      opacity: 0
-    }
-  })
-};
-
-const styles = {
-  list: css({
-    listStyle: 'none',
-    padding: 0,
-    '& li:not(:first-child)': {
-      borderTop: 'solid 1px #424545'
-    }
-  }),
-  enter: css({
-    animationFillMode: 'both',
-    animationDuration: '0.75s',
-    animationName: animations.slideInLeft
-  }),
-  exit: height =>
-    css({
-      animationFillMode: 'both',
-      animationDuration: '0.75s',
-      animationName: animations.zoomOut,
-      transition: 'max-height 0.75s, opacity 0.75s',
-      maxHeight: height,
-      overflow: 'hidden'
-    }),
-  onExit: node => {
-    node.classList.add(styles.exit(`${node.offsetHeight}px`));
-    requestAnimationFrame(() => {
-      node.style.maxHeight = '0';
-      node.style.opacity = '0';
-    });
-  },
-  status: css({
-    '& header': {
-      textAlign: 'left'
-    },
-    '& > div': {
-      background: 'grey',
-      opacity: 0.5
-    }
-  }),
-  progressBar: css({
-    height: '4px',
-    background:
-      'linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55)',
-    width: 0,
-    transition: 'width 0.5s'
-  }),
-  filter: css({
-    display: 'flex',
-    justifyContent: 'space-between'
-  })
-};
+import listIcon from 'src/assets/list.svg';
+import scheduleIcon from 'src/assets/schedule.svg';
+import checkIcon from 'src/assets/check.svg';
 
 export default class TodoList extends Component {
   state = {
@@ -90,18 +16,22 @@ export default class TodoList extends Component {
   };
 
   applyFilter = {
-    'ALL': todo => todo,
-    'ACTIVE': todo => !todo.done,
-    'DONE': todo => todo.done
+    ALL: todo => todo,
+    ACTIVE: todo => !todo.done,
+    DONE: todo => todo.done
   };
+
+  positionRatio = null;
 
   componentDidMount() {
     this.props.todoStore.onChange(todos => {
       this.setState({ todos: todos });
     });
+    const { width } = this.filterRef.getBoundingClientRect();
+    this.positionRatio = width / 3 + 8 * 3;
   }
 
-  filter = e => this.setState({ filter: e.currentTarget.dataset.filter })
+  filter = e => this.setState({ filter: e.currentTarget.dataset.filter });
 
   renderTodos() {
     const { toggleDone, updateTodo, removeTodo } = this.props.todoStore;
@@ -127,6 +57,18 @@ export default class TodoList extends Component {
     ));
   }
 
+  getActivePosition() {
+    switch (this.state.filter) {
+      default:
+      case 'ALL':
+        return 0;
+      case 'ACTIVE':
+        return this.positionRatio;
+      case 'DONE':
+        return this.positionRatio * 2;
+    }
+  }
+
   render() {
     const { title, todoStore } = this.props;
     const { percentage, number } = todoStore.getDone();
@@ -137,21 +79,25 @@ export default class TodoList extends Component {
         <TodoInput addTodo={todoStore.addTodo} />
         <section {...styles.status}>
           <header>
-            <div {...styles.filter}>
-              <span onClick={this.filter} data-filter="ALL">All</span>
-              <span onClick={this.filter} data-filter="ACTIVE">2</span>
-              <span onClick={this.filter} data-filter="DONE">3</span>
-            </div>
-            <div>
-            Completed: {number} / {this.state.todos.length}{' '}
-            <span role="img" aria-label="image">
-              🚀
-            </span>
+            <div {...styles.filter} ref={ref => (this.filterRef = ref)}>
+              <figure onClick={this.filter} data-filter="ALL">
+                <img src={listIcon} alt="list all" />
+                {/* <span>{`(${this.state.todos.length || 0})`}</span> */}
+              </figure>
+              <figure onClick={this.filter} data-filter="ACTIVE">
+                <img src={scheduleIcon} alt="todo" />
+                {/* <span>{`(${number})`}</span> */}
+              </figure>
+              <figure onClick={this.filter} data-filter="DONE">
+                <img src={checkIcon} alt="done" />
+                {/* <span>{`(${number})`}</span> */}
+              </figure>
+              <div {...styles.activeFilter(this.getActivePosition())} />
             </div>
           </header>
-          <div>
+          {/* <div>
             <div {...styles.progressBar} style={{ width: `${percentage}%` }} />
-          </div>
+          </div> */}
         </section>
         <div>
           <TransitionGroup {...styles.list} component="ul">

@@ -13,11 +13,13 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     '& img': {
-      display: 'none'
+      opacity: 0,
+      pointerEvents: 'none'
     },
     ':hover': {
       '& img': {
-        display: 'initial'
+        opacity: 1,
+        pointerEvents: 'initial'
       }
     },
     '& div': {
