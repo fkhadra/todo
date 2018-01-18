@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "dexie": "^2.0.1",
+    "firebase": "^4.8.2",
     "glamor": "^2.20.40",
     "normalize.css": "^7.0.0",
     "react": "^16.2.0",

@@ -27,6 +27,15 @@ export default class TodoList extends Component {
     this.props.todoStore.onChange(todos => {
       this.setState({ todos: todos });
     });
+    window.addEventListener('resize', this.computeRatio)
+    this.computeRatio();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.computeRatio);
+  }
+
+  computeRatio= () => {
     const { width } = this.filterRef.getBoundingClientRect();
     this.positionRatio = width / 3 + 8 * 3;
   }
