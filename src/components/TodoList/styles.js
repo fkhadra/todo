@@ -31,6 +31,7 @@ const animations = {
 const styles = {
   list: css({
     listStyle: 'none',
+    overflowY: 'scroll',
     padding: 0,
     '& li:not(:first-child)': {
       borderTop: 'solid 1px #424545'
