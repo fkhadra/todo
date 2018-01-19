@@ -5,10 +5,6 @@ class TodoStore extends EventEmitter {
   collection = [];
   done = 0;
 
-  onChange(cb) {
-    return this.on(this.events.ON_CHANGE, cb);
-  }
-
   set collection(item) {
     this._collection = item;
     this.done = 0 ;

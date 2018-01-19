@@ -3,6 +3,10 @@ export default class EventEmitter {
   events = {
     ON_CHANGE: 'on_change'
   };
+  
+  onChange(cb) {
+    return this.on(this.events.ON_CHANGE, cb);
+  }
 
   on(event, cb) {
     this.listeners.has(event) || this.listeners.set(event, []);
