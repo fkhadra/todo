@@ -2,6 +2,7 @@ import { uuid } from 'src/utils';
 
 class Todo {
   constructor({
+    listId,
     id = null,
     value = '',
     done = false,
@@ -13,6 +14,7 @@ class Todo {
     const now = Date.now();
 
     this.id = id || uuid();
+    this.listId = listId;
     this.value = value;
     this.done = done;
     this.createdBy = createdBy;
