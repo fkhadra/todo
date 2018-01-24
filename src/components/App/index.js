@@ -1,7 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import { Route } from 'react-router-dom';
 
-import TodoList from 'src/components/TodoList';
-import TodoStore from 'src/models/TodoStore';
+import Todos from 'src/components/Todos';
+import List from 'src/components/List';
+
+import todoStore from 'src/models/TodoStore';
 import listStore from 'src/models/ListStore';
 
 import MenuTrigger from './MenuTrigger';
@@ -9,18 +12,19 @@ import styles from './styles';
 
 export default class App extends Component {
   state = {
-    collection: [],
     isOpen: false
   };
 
-  componentDidMount() {
-    listStore.onChange(collection => this.setState({ collection }));
-  }
-
   toggleSidebar = () => this.setState({ isOpen: !this.state.isOpen });
 
+  loadTodos({ match }) {
+    todoStore.fetchTodos(match.params.id);
+    return <Todos todoStore={todoStore} />;
+  }
+
   render() {
-    const { isOpen, collection } = this.state;
+    const { isOpen } = this.state;
+
     return (
       <Fragment>
         <header {...styles.header}>
@@ -30,14 +34,10 @@ export default class App extends Component {
           </nav>
         </header>
         <aside {...styles.sidebar(isOpen)}>
-          <nav>
-            <ul>
-              {collection.map(item => <li key={item.id}>{item.label}</li>)}
-            </ul>
-          </nav>
+          <List listStore={listStore} toggleSidebar={this.toggleSidebar}/>
         </aside>
         <section {...styles.main}>
-          <TodoList title="Fucking tofos" todoStore={TodoStore} />
+          <Route exact path="/list/:id" component={this.loadTodos} />
         </section>
         <footer {...styles.footer}>FOOTER</footer>
       </Fragment>

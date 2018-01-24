@@ -24,13 +24,23 @@ class ListStore extends EventEmitter {
   }
 
   async fetchLists() {
-    if (await db.lists.count() === 0) {
+    if ((await db.lists.count()) === 0) {
       await db.lists.bulkAdd(defaultLists);
     }
     this.collection = await db.lists.toArray();
   }
 
+  find(id) {
+    return db.lists.get({ id });
+  }
 
+  save({ id = uuid(), label = 'Untitled' }) {
+    return db.lists.put({ id, label, writable: true });
+  }
+
+  remove(id){
+    return db.lists
+  }
 }
 
 export default new ListStore();

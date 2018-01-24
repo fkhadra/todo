@@ -13,3 +13,10 @@ html {
   text-align: center;
   padding: 5%;
 }
+
+a{
+  text-decoration: none;
+}
+a:visited{
+  color: #ffffff;
+}
