@@ -10,6 +10,22 @@ import listStore from 'src/models/ListStore';
 import MenuTrigger from './MenuTrigger';
 import styles from './styles';
 
+class Title extends Component {
+  state = {
+    id: null,
+    label: null
+  };
+
+  componentDidMount(){
+    console.log('mount')
+    this.props.listStore.find(this.props.id).then(list => this.setState({ ...list }));
+  }
+
+  render(){
+    return <h2>{this.state.label || '' }</h2>
+  }
+}
+
 export default class App extends Component {
   state = {
     isOpen: false
@@ -17,9 +33,17 @@ export default class App extends Component {
 
   toggleSidebar = () => this.setState({ isOpen: !this.state.isOpen });
 
-  loadTodos({ match }) {
+  loadTodos= ({ match }) => {
     todoStore.fetchTodos(match.params.id);
-    return <Todos todoStore={todoStore} />;
+   // listStore.find(match.params.id).then(list => this.setState({ activeList: list }))
+
+    return (
+      <Fragment>
+        <Title listStore={listStore} id={match.params.id} />
+        {/* <h2>{this.state.activeList && this.state.activeList.label}</h2> */}
+        <Todos todoStore={todoStore} />
+      </Fragment>
+    );
   }
 
   render() {
@@ -34,7 +58,7 @@ export default class App extends Component {
           </nav>
         </header>
         <aside {...styles.sidebar(isOpen)}>
-          <List listStore={listStore} toggleSidebar={this.toggleSidebar}/>
+          <List listStore={listStore} toggleSidebar={this.toggleSidebar} />
         </aside>
         <section {...styles.main}>
           <Route exact path="/list/:id" component={this.loadTodos} />
