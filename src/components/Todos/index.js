@@ -12,7 +12,8 @@ import checkIcon from 'src/assets/check.svg';
 export default class TodoList extends Component {
   state = {
     todos: [],
-    filter: 'ALL'
+    filter: 'ALL',
+    list: {}
   };
 
   applyFilter = {
@@ -27,13 +28,22 @@ export default class TodoList extends Component {
     this.props.todoStore.onChange(todos => {
       this.setState({ todos: todos });
     });
-    window.addEventListener('resize', this.computeRatio)
-    this.computeRatio();
+
+    this.loadTodos(this.props.activeListId);
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.computeRatio);
+  componentWillReceiveProps(nextProps){
+    const { activeListId } = nextProps;
+    this.loadTodos(activeListId);
   }
+
+  async loadTodos(activeListId){
+    this.props.todoStore.fetchTodos(activeListId);
+    this.setState({
+      list: await this.props.listStore.find(activeListId)
+    });
+  }
+
 
   computeRatio= () => {
     const { width } = this.filterRef.getBoundingClientRect();
@@ -84,7 +94,7 @@ export default class TodoList extends Component {
 
     return (
       <section>
-        <h2>{title}</h2>
+        <h2>{this.state.list ? this.state.list.label : ''}</h2>
         <TodoInput addTodo={todoStore.addTodo} />
         <section {...styles.status}>
           <header>
