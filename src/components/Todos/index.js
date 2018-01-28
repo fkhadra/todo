@@ -22,7 +22,7 @@ export default class TodoList extends Component {
     DONE: todo => todo.done
   };
 
-  positionRatio = null;
+  positionRatio = 0;
 
   componentDidMount() {
     this.props.todoStore.onChange(todos => {
@@ -50,7 +50,14 @@ export default class TodoList extends Component {
     this.positionRatio = width / 3 + 8 * 3;
   }
 
-  filter = e => this.setState({ filter: e.currentTarget.dataset.filter });
+  filter = e => {
+    const { width } = this.filterRef.getBoundingClientRect();
+    const ratio = width / 3;
+    const currentPosition = parseInt(e.currentTarget.dataset.idx, 10);
+
+    this.positionRatio = (ratio + (ratio/2) - 25) * currentPosition ;
+    this.setState({ filter: e.currentTarget.dataset.filter });
+  }
 
   renderTodos() {
     const { toggleDone, updateTodo, removeTodo } = this.props.todoStore;
@@ -76,18 +83,6 @@ export default class TodoList extends Component {
     ));
   }
 
-  getActivePosition() {
-    switch (this.state.filter) {
-      default:
-      case 'ALL':
-        return 0;
-      case 'ACTIVE':
-        return this.positionRatio;
-      case 'DONE':
-        return this.positionRatio * 2;
-    }
-  }
-
   render() {
     const { title, todoStore } = this.props;
     const { percentage, number } = todoStore.getDone();
@@ -99,19 +94,19 @@ export default class TodoList extends Component {
         <section {...styles.status}>
           <header>
             <div {...styles.filter} ref={ref => (this.filterRef = ref)}>
-              <figure onClick={this.filter} data-filter="ALL">
+              <figure onClick={this.filter} data-filter="ALL" data-idx="0">
                 <img src={listIcon} alt="list all" />
                 {/* <span>{`(${this.state.todos.length || 0})`}</span> */}
               </figure>
-              <figure onClick={this.filter} data-filter="ACTIVE">
+              <figure onClick={this.filter} data-filter="ACTIVE" data-idx="1">
                 <img src={scheduleIcon} alt="todo" />
                 {/* <span>{`(${number})`}</span> */}
               </figure>
-              <figure onClick={this.filter} data-filter="DONE">
+              <figure onClick={this.filter} data-filter="DONE" data-idx="2">
                 <img src={checkIcon} alt="done" />
                 {/* <span>{`(${number})`}</span> */}
               </figure>
-              <div {...styles.activeFilter(this.getActivePosition())} />
+              <div {...styles.activeFilter(this.positionRatio)} ref={r=>this.filterRef = r}/>
             </div>
           </header>
           {/* <div>

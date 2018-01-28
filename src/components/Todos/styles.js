@@ -87,7 +87,7 @@ const styles = {
   activeFilter: position => css({
     position: 'absolute',
     height: '3px',
-    width: '4.5rem',
+    width: '50px',
     bottom: 0,
     background: '#ffffff',
     transform: `translateX(${position}px)`,
