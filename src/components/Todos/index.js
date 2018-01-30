@@ -4,6 +4,7 @@ import { TransitionGroup, Transition } from 'react-transition-group';
 import styles from './styles';
 import Todo from './Todo';
 import TodoInput from './TodoInput';
+import TodoTitle from './TodoTitle';
 
 import listIcon from 'src/assets/list.svg';
 import scheduleIcon from 'src/assets/schedule.svg';
@@ -13,7 +14,9 @@ export default class TodoList extends Component {
   state = {
     todos: [],
     filter: 'ALL',
-    list: {}
+    list: {
+      label: ''
+    }
   };
 
   applyFilter = {
@@ -25,29 +28,20 @@ export default class TodoList extends Component {
   positionRatio = 0;
 
   componentDidMount() {
-    this.props.todoStore.onChange(todos => {
-      this.setState({ todos: todos });
+    this.props.todoStore.onChange(({ todos, list }) => {
+      this.setState({ todos, list });
     });
 
     this.loadTodos(this.props.activeListId);
   }
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     const { activeListId } = nextProps;
     this.loadTodos(activeListId);
   }
 
-  async loadTodos(activeListId){
+  async loadTodos(activeListId) {
     this.props.todoStore.fetchTodos(activeListId);
-    this.setState({
-      list: await this.props.listStore.find(activeListId)
-    });
-  }
-
-
-  computeRatio= () => {
-    const { width } = this.filterRef.getBoundingClientRect();
-    this.positionRatio = width / 3 + 8 * 3;
   }
 
   filter = e => {
@@ -55,9 +49,9 @@ export default class TodoList extends Component {
     const ratio = width / 3;
     const currentPosition = parseInt(e.currentTarget.dataset.idx, 10);
 
-    this.positionRatio = (ratio + (ratio/2) - 25) * currentPosition ;
+    this.positionRatio = (ratio + ratio / 2 - 25) * currentPosition;
     this.setState({ filter: e.currentTarget.dataset.filter });
-  }
+  };
 
   renderTodos() {
     const { toggleDone, updateTodo, removeTodo } = this.props.todoStore;
@@ -89,7 +83,20 @@ export default class TodoList extends Component {
 
     return (
       <section>
-        <h2>{this.state.list ? this.state.list.label : ''}</h2>
+        <h2>
+          <input
+            type="text"
+            onChange={e =>
+              this.setState({
+                list: {
+                  ...this.state.list,
+                  label: e.target.value
+                }
+              })
+            }
+            value={this.state.list.label}
+          />
+        </h2>
         <TodoInput addTodo={todoStore.addTodo} />
         <section {...styles.status}>
           <header>
@@ -106,7 +113,10 @@ export default class TodoList extends Component {
                 <img src={checkIcon} alt="done" />
                 {/* <span>{`(${number})`}</span> */}
               </figure>
-              <div {...styles.activeFilter(this.positionRatio)} ref={r=>this.filterRef = r}/>
+              <div
+                {...styles.activeFilter(this.positionRatio)}
+                ref={r => (this.filterRef = r)}
+              />
             </div>
           </header>
           {/* <div>
