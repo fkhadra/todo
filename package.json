@@ -23,6 +23,8 @@
     "prettier": "prettier --single-quote --write src/**/*.js"
   },
   "devDependencies": {
+    "eslint-plugin-flowtype": "^2.42.0",
+    "flow-bin": "^0.64.0",
     "prettier": "^1.10.2"
   }
 }
