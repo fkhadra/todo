@@ -1,4 +1,7 @@
 [ignore]
+.*/node_modules/protobufjs/.*
+.*/node_modules/eslint-plugin-jsx-a11y/.*
+.*/src/assets/.*
 
 [include]
 
@@ -7,5 +10,7 @@
 [lints]
 
 [options]
+module.system.node.resolve_dirname=src
 
 [strict]
+

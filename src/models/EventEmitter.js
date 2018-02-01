@@ -1,18 +1,24 @@
-/* @flow */
 
 type func = () => void;
 
-export default class EventEmitter {
+interface IEventEmitter {
+  onChange(callback: func): IEventEmitter;
+  on(event: string, callback: func): IEventEmitter;
+  dispatch(event: string, ...payload: any): void;
+};
+
+
+export default class EventEmitter implements IEventEmitter {
   listeners: Map<string, Array<func>>= new Map();
   events = {
     ON_CHANGE: 'on_change'
   };
   
-  onChange(cb: func) {
+  onChange(cb: func): IEventEmitter {
     return this.on(this.events.ON_CHANGE, cb);
   }
 
-  on(event: string, cb: func) {
+  on(event: string, cb: func): IEventEmitter {
     this.listeners.has(event) || this.listeners.set(event, []);
     // $FlowFixMe
     this.listeners.get(event).push(cb);
@@ -24,7 +30,7 @@ export default class EventEmitter {
       // $FlowFixMe
       this.listeners
         .get(event)
-        .forEach(cb => setTimeout(() => cb.call(this, ...payload), 0));
+        .forEach((cb: func) => setTimeout(() => cb.call(this, ...payload), 0));
     }
   }
 }
