@@ -1,43 +1,51 @@
-/* @flow */
-
 import EventEmitter from './EventEmitter';
-import { db } from 'src/utils';
+import { db, uuid } from 'src/utils';
 
-class List extends EventEmitter {
-  collection: Array<object> = [];
+const defaultLists = [
+  { id: uuid(), label: 'To-Do', writable: false },
+  { id: uuid(), label: 'Grocery', writable: false }
+];
+
+const eventEmitter = new EventEmitter();
+
+class List {
+  collection = [];
 
   constructor() {
-    super();
-    this.fetchLists();
+    this.fetch();
   }
 
-  set collection(item: Array<object>) {
-    this._collection = item;
-    this.dispatch(this.events.ON_CHANGE, this._collection);
-  }
-
-  get collection(): Array<object> {
-    return this._collection;
-  }
-
-  async fetchLists(): Promise<any> {
+  async fetch() {
     if ((await db.lists.count()) === 0) {
       await db.lists.bulkAdd(defaultLists);
     }
     this.collection = await db.lists.toArray();
   }
 
-  find(id): Promise {
+  set collection(item) {
+    this._collection = item;
+    eventEmitter.dispatch(this._collection);
+  }
+
+  get collection() {
+    return this._collection;
+  }
+
+  onChange(cb) {
+    return eventEmitter.subscribe(cb);
+  }
+
+  find(id) {
     return db.lists.get({ id });
   }
 
-  save({ id = uuid(), label = 'Untitled' }) {
-    return db.lists.put({ id, label, writable: true });
-  }
+  // save({ id = uuid(), label = 'Untitled' }) {
+  //   return db.lists.put({ id, label, writable: true });
+  // }
 
-  remove(id){
-    return db.lists
-  }
+  // remove(id){
+  //   return db.lists
+  // }
 }
 
 export default List;

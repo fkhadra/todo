@@ -1,26 +1,4 @@
-/* @flow */
-
-type todo = {
-  listId: string,
-  value: string,
-  id: string,
-  done: boolean,
-  createdBy: string | null,
-  modifiedBy: string | null,
-  createdAt: number,
-  updatedAt: number | null
-};
-
 class Todo {
-  listId: string;
-  value: string;
-  id: string;
-  done: boolean;
-  createdBy: string | null;
-  modifiedBy: string | null;
-  createdAt: number;
-  updatedAt: number | null;
-  
   constructor({
     listId,
     value,
@@ -30,7 +8,7 @@ class Todo {
     modifiedBy,
     createdAt,
     updatedAt
-  }: todo) {
+  }) {
     this.id = id;
     this.listId = listId;
     this.value = value;
@@ -41,7 +19,7 @@ class Todo {
     this.updatedAt = updatedAt;
   }
 
-  update(payload: todo): void {
+  update(payload) {
     Object.assign(this, {
       ...payload,
       updatedAt: Date.now()

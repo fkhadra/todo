@@ -1,71 +1,71 @@
-/* @flow */
 import Todo from './Todo';
+import List from './List';
 import EventEmitter from './EventEmitter';
 import { db, uuid } from 'src/utils';
 
-const defaultLists = [
-  { id: uuid(), label: 'To-Do', writable: false },
-  { id: uuid(), label: 'Grocery', writable: false }
-];
+const eventEmitter = new EventEmitter();
 
-class Store extends EventEmitter {
-  collection: Array<dasdadas> = [];
-  done = 0;
+class Store {
   activeList = null;
-  lists = [];
+  lists = new List();
   todos = [];
 
-  async fetchLists() {
-    if ((await db.lists.count()) === 0) {
-      await db.lists.bulkAdd(defaultLists);
-    }
-
-    this.lists = await db.lists.toArray();
+  constructor() {
+    this.lists.onChange(lists => {
+      lists.some(list => {
+        console.log(list);
+        if (
+          this.activeList !== null &&
+          list.id === this.activeList.id &&
+          list.label !== this.activeList.label
+        ) {
+          this.activeList = list;
+          this.todos = this.todos;
+          return true;
+        }
+        return false;
+      });
+    });
   }
 
-  find(id) {
-    return db.lists.get({ id });
+  set todos(val) {
+    this._todos = val;
+    eventEmitter.dispatch({
+      list: this.activeList,
+      todos: this.todos
+    });
+    console.log('set')
   }
 
-  save({ id = uuid(), label = 'Untitled' }) {
-    return db.lists.put({ id, label, writable: true });
+  get todos(){
+    return this._todos;
   }
 
-  remove(id) {
-    return db.lists;
+  onChange(cb) {
+    return eventEmitter.subscribe(cb);
+  }
+
+  getDone() {
+    const done = this.todos.reduce(
+      (acc, todo) => (todo.done ? acc + 1 : acc),
+      0
+    );
+    return {
+      number: done,
+      percentage: done / this.todos.length * 100
+    };
   }
 
   async fetchTodos(listId) {
-    this.activeList = await ListStore.find(listId);
-    this.collection = (await db.todos.where({ listId: listId }).toArray())
+    this.activeList = await this.lists.find(listId);
+    this.todos = (await db.todos.where({ listId: listId }).toArray())
       .map(todo => new Todo(todo))
       .reverse();
   }
 
-  set collection(item) {
-    this._collection = item;
-    this.done = 0;
-    item.forEach(todo => todo.done && this.done++);
-    this.dispatch(this.events.ON_CHANGE, {
-      list: this.activeList,
-      todos: this.collection
-    });
-  }
-
-  get collection() {
-    return this._collection;
-  }
-
-  getDone() {
-    return {
-      number: this.done,
-      percentage: this.done / this.collection.length * 100
-    };
-  }
-
   addTodo = payload => {
     const todo = new Todo({
-      id: null,
+      id: uuid(),
       done: false,
       createdBy: null,
       ModifiedBy: null,
@@ -74,13 +74,11 @@ class Store extends EventEmitter {
       listId: this.activeList.id,
       ...payload
     });
-    return db.todos
-      .put(todo)
-      .then(() => (this.collection = [todo, ...this.collection]));
+    return db.todos.put(todo).then(() => (this.todos = [todo, ...this.todos]));
   };
 
   updateTodo = (id, payload) => {
-    this.collection = this.collection.map(todo => {
+    this.todo = this.todos.map(todo => {
       if (todo.id === id) {
         todo.update(payload);
         db.todos.put(todo);
@@ -92,12 +90,10 @@ class Store extends EventEmitter {
   removeTodo = id =>
     db.todos
       .delete(id)
-      .then(
-        () => (this.collection = this.collection.filter(todo => todo.id !== id))
-      );
+      .then(() => (this.todos = this.todos.filter(todo => todo.id !== id)));
 
   toggleDone = id => {
-    this.collection = this.collection.map(todo => {
+    this.todos = this.todos.map(todo => {
       if (todo.id === id) {
         todo.done = !todo.done;
         db.todos.put(todo);
@@ -107,4 +103,4 @@ class Store extends EventEmitter {
   };
 }
 
-export default new TodoStore();
+export default new Store();

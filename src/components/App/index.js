@@ -4,8 +4,7 @@ import { Route } from 'react-router-dom';
 import Todos from 'src/components/Todos';
 import List from 'src/components/List';
 
-import todoStore from 'src/models/TodoStore';
-import listStore from 'src/models/ListStore';
+import store from 'src/models/store';
 
 import MenuTrigger from './MenuTrigger';
 import styles from './styles';
@@ -30,7 +29,7 @@ export default class App extends Component {
           </nav>
         </header>
         <aside {...styles.sidebar(isOpen)}>
-          <List listStore={listStore} toggleSidebar={this.toggleSidebar} />
+          <List listStore={store.lists} toggleSidebar={this.toggleSidebar} />
         </aside>
         <section {...styles.main}>
           <Route
@@ -38,8 +37,7 @@ export default class App extends Component {
             path="/list/:id"
             render={({ match }) => (
               <Todos
-                todoStore={todoStore}
-                listStore={listStore}
+                store={store}
                 activeListId={match.params.id}
               />
             )}

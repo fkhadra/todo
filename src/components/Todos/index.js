@@ -28,7 +28,7 @@ export default class TodoList extends Component {
   positionRatio = 0;
 
   componentDidMount() {
-    this.props.todoStore.onChange(({ todos, list }) => {
+    this.props.store.onChange(({ todos, list }) => {
       this.setState({ todos, list });
     });
 
@@ -41,7 +41,7 @@ export default class TodoList extends Component {
   }
 
   async loadTodos(activeListId) {
-    this.props.todoStore.fetchTodos(activeListId);
+    this.props.store.fetchTodos(activeListId);
   }
 
   filter = e => {
@@ -54,7 +54,7 @@ export default class TodoList extends Component {
   };
 
   renderTodos() {
-    const { toggleDone, updateTodo, removeTodo } = this.props.todoStore;
+    const { toggleDone, updateTodo, removeTodo } = this.props.store;
     const { todos, filter } = this.state;
 
     return todos.filter(this.applyFilter[filter]).map(todo => (
@@ -78,8 +78,8 @@ export default class TodoList extends Component {
   }
 
   render() {
-    const { title, todoStore } = this.props;
-    const { percentage, number } = todoStore.getDone();
+    const { title, store } = this.props;
+    const { percentage, number } = store.getDone();
 
     return (
       <section>
@@ -97,7 +97,7 @@ export default class TodoList extends Component {
             value={this.state.list.label}
           />
         </h2>
-        <TodoInput addTodo={todoStore.addTodo} />
+        <TodoInput addTodo={store.addTodo} />
         <section {...styles.status}>
           <header>
             <div {...styles.filter} ref={ref => (this.filterRef = ref)}>
