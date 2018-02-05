@@ -35,12 +35,11 @@ export default class TodoList extends Component {
     this.loadTodos(this.props.activeListId);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { activeListId } = nextProps;
+  componentWillReceiveProps({ activeListId }) {
     this.loadTodos(activeListId);
   }
 
-  async loadTodos(activeListId) {
+  loadTodos(activeListId) {
     this.props.store.fetchTodos(activeListId);
   }
 
@@ -78,25 +77,14 @@ export default class TodoList extends Component {
   }
 
   render() {
-    const { title, store } = this.props;
+    const { store } = this.props;
     const { percentage, number } = store.getDone();
 
     return (
       <section>
-        <h2>
-          <input
-            type="text"
-            onChange={e =>
-              this.setState({
-                list: {
-                  ...this.state.list,
-                  label: e.target.value
-                }
-              })
-            }
-            value={this.state.list.label}
-          />
-        </h2>
+        <TodoTitle
+          list={this.state.list}
+        />
         <TodoInput addTodo={store.addTodo} />
         <section {...styles.status}>
           <header>

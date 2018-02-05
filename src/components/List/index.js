@@ -19,7 +19,7 @@ const styles = {
       lineHeight: '30px',
       display: 'flex',
       '&.active': {
-        background: 'red'
+        background: 'purple'
       }
     },
     '& span': {

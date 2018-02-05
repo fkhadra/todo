@@ -1,52 +1,43 @@
 import React, { Component } from 'react';
+import Input from 'src/components/Input';
+import { css } from 'glamor';
 
-import { keys } from 'src/utils';
+const styles = {
+  input: css({
+    padding: '8px',
+    border: 'none'
+  })
+};
 
-export default class TodoTitle extends Component{
+export default class TodoTitle extends Component {
   state = {
-    editing: false,
-    inputValue: ''
+    editing: false
   };
 
-  toggleEdit = () => this.setState({ editing: !this.state.editing });
+  toggleEdit = () =>
+    !this.props.list.writable && this.setState({ editing: !this.state.editing });
 
-  handleSubmit = e => {
-    const value = this.state.inputValue.trim();
-
-    if (
-      (e.which === keys.ENTER && value.length) ||
-      (e.type === 'blur' && value.length)
-    ) {
-      
-      this.toggleEdit();
-    } else if (e.which === keys.ESCAPE) {
-      this.toggleEdit();
+  handleSubmit = (value, success) => {
+    if (success) {
+      //save todos title
     }
+    this.toggleEdit();
   };
 
-  handleEdit = e => {
-    this.setState({ inputValue: e.target.value });
-  };
-
-  render(){
-    return( 
+  render() {
+    return (
       <h2>
         {this.state.editing ? (
-          <input
-          onChange={this.handleEdit}
-          onBlur={this.handleSubmit}
-          onKeyPress={this.handleSubmit}
-          type="text"
-          value={this.state.inputValue}
-          onFocus={this.onFocus}
-          autoFocus 
+          <div {...styles.input}>
+            <Input
+            initialValue={this.props.list.label}
+            handleSubmit={this.handleSubmit}
           />
+          </div>
         ) : (
-          <span onDoubleClick={this.toggleEdit}>
-          Title
-          </span>
+          <span onDoubleClick={this.toggleEdit}>{this.props.list.label}</span>
         )}
       </h2>
-    )
+    );
   }
 }

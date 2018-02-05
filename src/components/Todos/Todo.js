@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { css } from 'glamor';
 
 import Checkmark from './Checkmark';
+import Input from 'src/components/Input';
 import deleteIcon from 'src/assets/delete.svg';
-
-import { keys } from 'src/utils';
 
 const styles = {
   container: css({
@@ -65,18 +64,8 @@ const styles = {
 };
 
 export default class Todo extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editing: false,
-      inputValue: props.todo.value
-    };
-    this.touchTimer = null;
-  }
-
-  onFocus = e => {
-    const len = this.props.todo.value.length;
-    e.target.setSelectionRange(len, len);
+  state = {
+    editing: false
   };
 
   toggle = () => this.props.toggleDone(this.props.todo.id);
@@ -85,32 +74,12 @@ export default class Todo extends Component {
 
   toggleEdit = () => this.setState({ editing: !this.state.editing });
 
-  handleSubmit = e => {
-    const value = this.state.inputValue.trim();
-
-    if (
-      (e.which === keys.ENTER && value.length) ||
-      (e.type === 'blur' && value.length)
-    ) {
+  handleSubmit = (value, success) => {
+    if (success) {
       this.props.updateTodo(this.props.todo.id, { value });
-      this.toggleEdit();
-    } else if (e.which === keys.ESCAPE) {
-      this.toggleEdit();
     }
+    this.toggleEdit();
   };
-
-  handleEdit = e => {
-    this.setState({ inputValue: e.target.value });
-  };
-
-  handleTouchStart = e => {
-    console.log('touch Start');
-    this.touchTimer = setTimeout(() => {
-      console.log('long touch');
-    }, 800);
-  };
-
-  handleTouchEnd = () => this.touchTimer && clearTimeout(this.touchTimer);
 
   render() {
     const { done, value } = this.props.todo;
@@ -120,14 +89,9 @@ export default class Todo extends Component {
           <Checkmark checked={done} />
         </div>
         {this.state.editing ? (
-          <input
-            onChange={this.handleEdit}
-            onBlur={this.handleSubmit}
-            onKeyPress={this.handleSubmit}
-            type="text"
-            value={this.state.inputValue}
-            onFocus={this.onFocus}
-            autoFocus
+          <Input
+            handleSubmit={this.handleSubmit}
+            initialValue={this.props.todo.value}
           />
         ) : (
           <div>
