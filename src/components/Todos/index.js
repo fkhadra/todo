@@ -84,6 +84,7 @@ export default class TodoList extends Component {
       <section>
         <TodoTitle
           list={this.state.list}
+          store={store}
         />
         <TodoInput addTodo={store.addTodo} />
         <section {...styles.status}>

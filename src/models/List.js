@@ -39,9 +39,10 @@ class List {
     return db.lists.get({ id });
   }
 
-  // save({ id = uuid(), label = 'Untitled' }) {
-  //   return db.lists.put({ id, label, writable: true });
-  // }
+  async save({ id = uuid(), label = 'Untitled' }) {
+    await db.lists.put({ id, label });
+    this.fetch();
+  }
 
   // remove(id){
   //   return db.lists

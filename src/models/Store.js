@@ -101,6 +101,10 @@ class Store {
       return todo;
     });
   };
+
+  saveList(...args){
+    return this.lists.save(...args);
+  }
 }
 
 export default new Store();

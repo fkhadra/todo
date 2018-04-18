@@ -15,11 +15,12 @@ export default class TodoTitle extends Component {
   };
 
   toggleEdit = () =>
-    !this.props.list.writable && this.setState({ editing: !this.state.editing });
+    this.props.list.writable &&
+    this.setState({ editing: !this.state.editing });
 
   handleSubmit = (value, success) => {
     if (success) {
-      //save todos title
+      this.props.store.saveList({ id: this.props.list.id, label: value });
     }
     this.toggleEdit();
   };
@@ -30,9 +31,9 @@ export default class TodoTitle extends Component {
         {this.state.editing ? (
           <div {...styles.input}>
             <Input
-            initialValue={this.props.list.label}
-            handleSubmit={this.handleSubmit}
-          />
+              initialValue={this.props.list.label}
+              handleSubmit={this.handleSubmit}
+            />
           </div>
         ) : (
           <span onDoubleClick={this.toggleEdit}>{this.props.list.label}</span>

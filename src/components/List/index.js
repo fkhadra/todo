@@ -6,6 +6,8 @@ import { css } from 'glamor';
 import addListIcon from 'src/assets/add-list.svg';
 import listIcon from 'src/assets/list.svg';
 
+import { uuid } from 'src/utils';
+
 const styles = {
   list: css({
     listStyle: 'none',
@@ -36,11 +38,20 @@ export default class List extends Component {
     collection: []
   };
 
+  newTodoId = null;
+
   componentDidMount() {
     this.props.listStore.onChange(collection => this.setState({ collection }));
   }
 
+  createNewTodo = () => {
+    this.props.listStore.save({ id: this.newTodoId }) &&
+      this.props.toggleSidebar();
+  };
+
   render() {
+    this.newTodoId = uuid();
+
     return (
       <nav>
         <ul {...styles.list}>
@@ -53,10 +64,10 @@ export default class List extends Component {
             </li>
           ))}
           <li>
-            <a>
+            <NavLink onClick={this.createNewTodo} to={`/list/${this.newTodoId}`}>
               <img src={addListIcon} alt="Add list" />
               <span>Create new List</span>
-            </a>
+            </NavLink>
           </li>
         </ul>
       </nav>
