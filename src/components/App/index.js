@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Route } from 'react-router-dom';
+import { observer } from "mobx-react";
 
 import Todos from 'src/components/Todos';
 import List from 'src/components/List';
@@ -9,7 +10,7 @@ import store from 'src/models/store';
 import MenuTrigger from './MenuTrigger';
 import styles from './styles';
 
-export default class App extends Component {
+class App extends Component {
   state = {
     isOpen: false,
     isLoading: false
@@ -29,7 +30,7 @@ export default class App extends Component {
           </nav>
         </header>
         <aside {...styles.sidebar(isOpen)}>
-          <List listStore={store.lists} toggleSidebar={this.toggleSidebar} />
+          <List listStore={store.list} toggleSidebar={this.toggleSidebar} />
         </aside>
         <section {...styles.main}>
           <Route
@@ -48,3 +49,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default observer(App);

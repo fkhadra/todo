@@ -7,7 +7,7 @@ const eventEmitter = new EventEmitter();
 
 class Store {
   activeList = null;
-  lists = new List();
+  list = new List();
   todos = [];
 
   constructor() {

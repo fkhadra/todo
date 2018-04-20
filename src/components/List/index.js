@@ -1,76 +1,38 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-
-import { css } from 'glamor';
+import { observer } from 'mobx-react';
 
 import addListIcon from 'src/assets/add-list.svg';
 import listIcon from 'src/assets/list.svg';
+import styles from './styles';
 
 import { uuid } from 'src/utils';
 
-const styles = {
-  list: css({
-    listStyle: 'none',
-    padding: 0,
-    '& li': {
-      textAlign: 'left'
-    },
-    '& a': {
-      padding: '8px',
-      height: '30px',
-      lineHeight: '30px',
-      display: 'flex',
-      '&.active': {
-        background: 'purple'
-      }
-    },
-    '& span': {
-      marginLeft: '8px'
-    },
-    '& img': {
-      width: '30px'
-    }
-  })
-};
-
-export default class List extends Component {
-  state = {
-    collection: []
+const List = ({ listStore, toggleSidebar }) => {
+  const createNewTodo = () => {
+    listStore.save({ id: this.newTodoId }) && toggleSidebar();
   };
 
-  newTodoId = null;
-
-  componentDidMount() {
-    this.props.listStore.onChange(collection => this.setState({ collection }));
-  }
-
-  createNewTodo = () => {
-    this.props.listStore.save({ id: this.newTodoId }) &&
-      this.props.toggleSidebar();
-  };
-
-  render() {
-    this.newTodoId = uuid();
-
-    return (
-      <nav>
-        <ul {...styles.list}>
-          {this.state.collection.map(({ id, label }) => (
-            <li key={id}>
-              <NavLink onClick={this.props.toggleSidebar} to={`/list/${id}`}>
-                <img src={listIcon} alt="List" />
-                <span>{label}</span>
-              </NavLink>
-            </li>
-          ))}
-          <li>
-            <NavLink onClick={this.createNewTodo} to={`/list/${this.newTodoId}`}>
-              <img src={addListIcon} alt="Add list" />
-              <span>Create new List</span>
+  return (
+    <nav>
+      <ul {...styles.list}>
+        {listStore.collection.map(({ id, label }) => (
+          <li key={id}>
+            <NavLink onClick={toggleSidebar} to={`/list/${id}`}>
+              <img src={listIcon} alt="List" />
+              <span>{label}</span>
             </NavLink>
           </li>
-        </ul>
-      </nav>
-    );
-  }
-}
+        ))}
+        <li>
+          <NavLink onClick={createNewTodo} to={`/list/${uuid()}`}>
+            <img src={addListIcon} alt="Add list" />
+            <span>Create new List</span>
+          </NavLink>
+        </li>
+      </ul>
+    </nav>
+  );
+};
+
+export default observer(List);
