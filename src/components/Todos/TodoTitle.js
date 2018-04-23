@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { observer } from "mobx-react";
 import Input from 'src/components/Input';
 import { css } from 'glamor';
 
@@ -9,7 +10,7 @@ const styles = {
   })
 };
 
-export default class TodoTitle extends Component {
+class TodoTitle extends Component {
   state = {
     editing: false
   };
@@ -42,3 +43,5 @@ export default class TodoTitle extends Component {
     );
   }
 }
+
+export default observer(TodoTitle);

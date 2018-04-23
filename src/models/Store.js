@@ -1,49 +1,48 @@
+import { decorate, observable } from 'mobx';
 import Todo from './Todo';
 import List from './List';
-import EventEmitter from './EventEmitter';
 import { db, uuid } from 'src/utils';
 
-const eventEmitter = new EventEmitter();
 
 class Store {
   activeList = null;
   list = new List();
   todos = [];
 
-  constructor() {
-    this.lists.onChange(lists => {
-      lists.some(list => {
-        console.log(list);
-        if (
-          this.activeList !== null &&
-          list.id === this.activeList.id &&
-          list.label !== this.activeList.label
-        ) {
-          this.activeList = list;
-          this.todos = this.todos;
-          return true;
-        }
-        return false;
-      });
-    });
-  }
+  // constructor() {
+  //   this.lists.onChange(lists => {
+  //     lists.some(list => {
+  //       console.log(list);
+  //       if (
+  //         this.activeList !== null &&
+  //         list.id === this.activeList.id &&
+  //         list.label !== this.activeList.label
+  //       ) {
+  //         this.activeList = list;
+  //         this.todos = this.todos;
+  //         return true;
+  //       }
+  //       return false;
+  //     });
+  //   });
+  // }
 
-  set todos(val) {
-    this._todos = val;
-    eventEmitter.dispatch({
-      list: this.activeList,
-      todos: this.todos
-    });
-    console.log('set')
-  }
+  // set todos(val) {
+  //   this._todos = val;
+  //   eventEmitter.dispatch({
+  //     list: this.activeList,
+  //     todos: this.todos
+  //   });
+  //   console.log('set')
+  // }
 
-  get todos(){
-    return this._todos;
-  }
+  // get todos(){
+  //   return this._todos;
+  // }
 
-  onChange(cb) {
-    return eventEmitter.subscribe(cb);
-  }
+  // onChange(cb) {
+  //   return eventEmitter.subscribe(cb);
+  // }
 
   getDone() {
     const done = this.todos.reduce(
@@ -57,7 +56,7 @@ class Store {
   }
 
   async fetchTodos(listId) {
-    this.activeList = await this.lists.find(listId);
+    this.activeList = await this.list.find(listId);
     this.todos = (await db.todos.where({ listId: listId }).toArray())
       .map(todo => new Todo(todo))
       .reverse();
@@ -107,4 +106,9 @@ class Store {
   }
 }
 
-export default new Store();
+const ObservableStore = decorate(Store, {
+  activeList: observable,
+  todos: observable
+})
+
+export default new ObservableStore();

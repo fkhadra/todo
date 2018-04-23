@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { observer } from "mobx-react";
 import { TransitionGroup, Transition } from 'react-transition-group';
 
 import styles from './styles';
@@ -10,13 +11,9 @@ import listIcon from 'src/assets/list.svg';
 import scheduleIcon from 'src/assets/schedule.svg';
 import checkIcon from 'src/assets/check.svg';
 
-export default class TodoList extends Component {
+class TodoList extends Component {
   state = {
-    todos: [],
     filter: 'ALL',
-    list: {
-      label: ''
-    }
   };
 
   applyFilter = {
@@ -28,10 +25,6 @@ export default class TodoList extends Component {
   positionRatio = 0;
 
   componentDidMount() {
-    this.props.store.onChange(({ todos, list }) => {
-      this.setState({ todos, list });
-    });
-
     this.loadTodos(this.props.activeListId);
   }
 
@@ -53,8 +46,8 @@ export default class TodoList extends Component {
   };
 
   renderTodos() {
-    const { toggleDone, updateTodo, removeTodo } = this.props.store;
-    const { todos, filter } = this.state;
+    const { toggleDone, updateTodo, removeTodo, todos} = this.props.store;
+    const { filter } = this.state;
 
     return todos.filter(this.applyFilter[filter]).map(todo => (
       <Transition
@@ -78,14 +71,14 @@ export default class TodoList extends Component {
 
   render() {
     const { store } = this.props;
-    const { percentage, number } = store.getDone();
+    //const { percentage, number } = store.getDone();
 
     return (
       <section>
-        <TodoTitle
-          list={this.state.list}
+        {store.activeList && <TodoTitle
+          list={store.activeList}
           store={store}
-        />
+        />}
         <TodoInput addTodo={store.addTodo} />
         <section {...styles.status}>
           <header>
@@ -121,3 +114,5 @@ export default class TodoList extends Component {
     );
   }
 }
+
+export default observer(TodoList);
