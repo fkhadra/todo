@@ -25,7 +25,7 @@ class List {
   }
 
   async save({ id = uuid(), label = 'Untitled' }) {
-    await db.lists.put({ id, label });
+    await db.lists.put({ id, label, writable: true });
     this.fetch();
   }
 }

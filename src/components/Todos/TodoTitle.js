@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from "mobx-react";
+import { observer } from 'mobx-react';
 import Input from 'src/components/Input';
 import { css } from 'glamor';
 
@@ -16,12 +16,11 @@ class TodoTitle extends Component {
   };
 
   toggleEdit = () =>
-    this.props.list.writable &&
-    this.setState({ editing: !this.state.editing });
+    this.props.store.activeList.writable && this.setState({ editing: !this.state.editing });
 
   handleSubmit = (value, success) => {
     if (success) {
-      this.props.store.saveList({ id: this.props.list.id, label: value });
+      this.props.store.saveList({ id: this.props.store.activeList.id, label: value });
     }
     this.toggleEdit();
   };
@@ -32,12 +31,12 @@ class TodoTitle extends Component {
         {this.state.editing ? (
           <div {...styles.input}>
             <Input
-              initialValue={this.props.list.label}
+              initialValue={this.props.store.activeList.label}
               handleSubmit={this.handleSubmit}
             />
           </div>
         ) : (
-          <span onDoubleClick={this.toggleEdit}>{this.props.list.label}</span>
+          <span onDoubleClick={this.toggleEdit}>{this.props.store.activeList && this.props.store.activeList.label}</span>
         )}
       </h2>
     );

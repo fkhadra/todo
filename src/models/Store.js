@@ -9,41 +9,6 @@ class Store {
   list = new List();
   todos = [];
 
-  // constructor() {
-  //   this.lists.onChange(lists => {
-  //     lists.some(list => {
-  //       console.log(list);
-  //       if (
-  //         this.activeList !== null &&
-  //         list.id === this.activeList.id &&
-  //         list.label !== this.activeList.label
-  //       ) {
-  //         this.activeList = list;
-  //         this.todos = this.todos;
-  //         return true;
-  //       }
-  //       return false;
-  //     });
-  //   });
-  // }
-
-  // set todos(val) {
-  //   this._todos = val;
-  //   eventEmitter.dispatch({
-  //     list: this.activeList,
-  //     todos: this.todos
-  //   });
-  //   console.log('set')
-  // }
-
-  // get todos(){
-  //   return this._todos;
-  // }
-
-  // onChange(cb) {
-  //   return eventEmitter.subscribe(cb);
-  // }
-
   getDone() {
     const done = this.todos.reduce(
       (acc, todo) => (todo.done ? acc + 1 : acc),
@@ -102,7 +67,7 @@ class Store {
   };
 
   saveList(...args){
-    return this.lists.save(...args);
+    return this.list.save(...args);
   }
 }
 

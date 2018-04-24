@@ -75,10 +75,9 @@ class TodoList extends Component {
 
     return (
       <section>
-        {store.activeList && <TodoTitle
-          list={store.activeList}
+        <TodoTitle
           store={store}
-        />}
+        />
         <TodoInput addTodo={store.addTodo} />
         <section {...styles.status}>
           <header>

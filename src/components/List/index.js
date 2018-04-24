@@ -9,8 +9,9 @@ import styles from './styles';
 import { uuid } from 'src/utils';
 
 const List = ({ listStore, toggleSidebar }) => {
-  const createNewTodo = () => {
-    listStore.save({ id: this.newTodoId }) && toggleSidebar();
+  const newTodoListId = uuid();
+  const createNewTodoList = () => {
+    listStore.save({ id: newTodoListId }) && toggleSidebar();
   };
 
   return (
@@ -25,7 +26,7 @@ const List = ({ listStore, toggleSidebar }) => {
           </li>
         ))}
         <li>
-          <NavLink onClick={createNewTodo} to={`/list/${uuid()}`}>
+          <NavLink onClick={createNewTodoList} to={`/list/${newTodoListId}`}>
             <img src={addListIcon} alt="Add list" />
             <span>Create new List</span>
           </NavLink>
