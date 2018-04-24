@@ -42,6 +42,7 @@ const styles = {
     css({
       position: 'relative',
       opacity: done ? 0.5 : 1,
+      width: '100%',
       textAlign: 'left',
       ':after': {
         content: '""',
@@ -68,6 +69,8 @@ export default class Todo extends Component {
     editing: false
   };
 
+  touchStart = 0;
+
   toggle = () => this.props.toggleDone(this.props.todo.id);
 
   remove = () => this.props.removeTodo(this.props.todo.id);
@@ -79,6 +82,20 @@ export default class Todo extends Component {
       this.props.updateTodo(this.props.todo.id, { value });
     }
     this.toggleEdit();
+  };
+
+  handleTouchStart = (e) => {
+    if(e.touches.length === 1) {
+      this.setState({ editing: false});
+      this.touchStart = Date.now();
+    }
+  }
+
+  handleTouchEnd = () => {
+    const delta = Date.now() - this.touchStart;
+    if (delta >= 400 && delta <= 800) {
+      this.toggleEdit();
+    }
   };
 
   render() {
@@ -94,15 +111,13 @@ export default class Todo extends Component {
             initialValue={this.props.todo.value}
           />
         ) : (
-          <div>
-            <span
+          <div
               {...styles.content(done)}
               onDoubleClick={this.toggleEdit}
               onTouchStart={this.handleTouchStart}
               onTouchEnd={this.handleTouchEnd}
             >
               {value}
-            </span>
           </div>
         )}
         <div>
