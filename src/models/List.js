@@ -1,5 +1,6 @@
 import { observable, decorate } from 'mobx';
 import { db, uuid } from 'src/utils';
+import { dbService, authService } from 'src/services/firebase';
 
 const defaultLists = [
   { id: uuid(), label: 'To-Do', writable: false },
@@ -8,16 +9,24 @@ const defaultLists = [
 
 class List {
   collection = [];
+  //userId = null;
 
-  constructor() {
+  constructor(userId) {
+    //this.userId = userId;
     this.fetch();
   }
 
-  async fetch() {
-    if ((await db.lists.count()) === 0) {
-      await db.lists.bulkAdd(defaultLists);
-    }
-    this.collection = await db.lists.toArray();
+  fetch() {
+    dbService.ref(`list/igZ2dfJCeQMImxso11f7mHFDmiv1`).on('value', snapshot => {
+     const payload = snapshot.val();
+     if( payload === null ) {
+       dbService.ref(`list/igZ2dfJCeQMImxso11f7mHFDmiv1`).set(defaultLists);
+       this.collection = defaultLists;
+       return;
+     }
+
+      this.collection = snapshot.val();
+    });
   }
 
   find(id) {
