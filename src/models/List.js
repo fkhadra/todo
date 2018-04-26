@@ -2,10 +2,10 @@ import { observable, decorate } from 'mobx';
 import { db, uuid } from 'src/utils';
 import { dbService, authService } from 'src/services/firebase';
 
-const defaultLists = [
-  { id: uuid(), label: 'To-Do', writable: false },
-  { id: uuid(), label: 'Grocery', writable: false }
-];
+const defaultLists = {
+  [uuid()]: { label: 'To-Do', writable: false },
+  [uuid()]: { label: 'Grocery', writable: false },
+};
 
 class List {
   collection = [];
@@ -17,16 +17,8 @@ class List {
   }
 
   fetch() {
-    dbService.ref(`list/igZ2dfJCeQMImxso11f7mHFDmiv1`).on('value', snapshot => {
-     const payload = snapshot.val();
-     if( payload === null ) {
-       dbService.ref(`list/igZ2dfJCeQMImxso11f7mHFDmiv1`).set(defaultLists);
-       this.collection = defaultLists;
-       return;
-     }
-
-      this.collection = snapshot.val();
-    });
+    console.log(authService.currentUserS)
+    
   }
 
   find(id) {
