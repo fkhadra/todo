@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 // import Todos from 'src/components/Todos';
-// import List from 'src/components/List';
+ import List from 'src/components/List';
 
 // import store from 'src/models/store';
 
@@ -30,8 +30,7 @@ class Home extends Component {
           </nav>
         </header>
         <aside {...styles.sidebar(isOpen)}>
-          list here
-          {/* <List listStore={store.list} toggleSidebar={this.toggleSidebar} /> */}
+          <List store={this.props.store} toggleSidebar={this.toggleSidebar} />
         </aside>
         <section {...styles.main}>
           main

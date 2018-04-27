@@ -8,16 +8,16 @@ import styles from './styles';
 
 import { uuid } from 'src/utils';
 
-const List = ({ listStore, toggleSidebar }) => {
+const List = ({ store, toggleSidebar }) => {
   const newTodoListId = uuid();
   const createNewTodoList = () => {
-    listStore.save({ id: newTodoListId }) && toggleSidebar();
+    store.save({ id: newTodoListId }) && toggleSidebar();
   };
 
   return (
     <nav>
       <ul {...styles.list}>
-        {listStore.collection.map(({ id, label }) => (
+        {store.list.map(({ id, label }) => (
           <li key={id}>
             <NavLink onClick={toggleSidebar} to={`/list/${id}`}>
               <img src={listIcon} alt="List" />

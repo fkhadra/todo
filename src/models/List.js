@@ -17,8 +17,21 @@ class List {
   }
 
   fetch() {
-    console.log(authService.currentUserS)
     
+    //dbService.collection('lists').get()
+    // dbService.ref(`todo/wqwqwq`).on('value', snapshot => {
+    //   console.log(snapshot.val)
+    // })
+    // dbService.ref(`user/9EuY4nzSMeTQZQDJ4udELcHvfji1`).on('value', snapshot => {
+    //  const payload = snapshot.val();
+    //  if( payload === null ) {
+    //    dbService.ref(`user/9EuY4nzSMeTQZQDJ4udELcHvfji1`).set(defaultLists);
+    //    this.collection = defaultLists;
+    //    return;
+    //  }
+
+    //   this.collection = snapshot.val();
+    // });
   }
 
   find(id) {

@@ -1,79 +1,112 @@
 import { decorate, observable } from 'mobx';
-import Todo from './Todo';
-import List from './List';
-import { db, uuid } from 'src/utils';
+// import Todo from './Todo';
+// import List from './List';
+import User from './User';
+import { dbService, authService } from 'src/services/firebase';
 
+//import { db, uuid } from 'src/utils';
 
 class Store {
-  activeList = null;
-  list = new List();
-  todos = [];
+  user = null;
+  list = [];
 
-  getDone() {
-    const done = this.todos.reduce(
-      (acc, todo) => (todo.done ? acc + 1 : acc),
-      0
-    );
-    return {
-      number: done,
-      percentage: done / this.todos.length * 100
-    };
+  constructor(user) {
+    this.user = new User(user);
+    this.fetchUserList();
   }
 
-  async fetchTodos(listId) {
-    this.activeList = await this.list.find(listId);
-    this.todos = (await db.todos.where({ listId: listId }).toArray())
-      .map(todo => new Todo(todo))
-      .reverse();
+  fetchUserList() {
+    dbService
+      .collection('lists')
+      .where(this.user.uid, '==', true)
+      .orderBy('createdAt', 'asc')
+      .get()
+      .then(({ empty, docs }) => {
+        if (!empty) {
+          this.list =  docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          console.log(this.list)
+        } else {
+          this.addDefaultList();
+        }
+      })
+      .catch(err => console.log(err));
   }
 
-  addTodo = payload => {
-    const todo = new Todo({
-      id: uuid(),
-      done: false,
-      createdBy: null,
-      ModifiedBy: null,
-      createdAt: Date.now(),
-      updatedAt: null,
-      listId: this.activeList.id,
-      ...payload
-    });
-    return db.todos.put(todo).then(() => (this.todos = [todo, ...this.todos]));
-  };
+  addDefaultList(){
+    const batch = dbService.batch();
+    batch.set(dbService.collection('lists').doc(), this.createList('To-Do', false));
+    batch.set(dbService.collection('lists').doc(), this.createList('Grocery', false));
 
-  updateTodo = (id, payload) => {
-    this.todo = this.todos.map(todo => {
-      if (todo.id === id) {
-        todo.update(payload);
-        db.todos.put(todo);
-      }
-      return todo;
-    });
-  };
-
-  removeTodo = id =>
-    db.todos
-      .delete(id)
-      .then(() => (this.todos = this.todos.filter(todo => todo.id !== id)));
-
-  toggleDone = id => {
-    this.todos = this.todos.map(todo => {
-      if (todo.id === id) {
-        todo.done = !todo.done;
-        db.todos.put(todo);
-      }
-      return todo;
-    });
-  };
-
-  saveList(...args){
-    return this.list.save(...args);
+    batch.commit().then(commit => console.log('commit',commit)).catch(err => console.log(err));
   }
+
+  createList(label, writable = true) {
+    return { label, writable, [this.user.uid]: true, createdAt: Date.now() }
+  }
+
+  // getDone() {
+  //   const done = this.todos.reduce(
+  //     (acc, todo) => (todo.done ? acc + 1 : acc),
+  //     0
+  //   );
+  //   return {
+  //     number: done,
+  //     percentage: done / this.todos.length * 100
+  //   };
+  // }
+
+  // async fetchTodos(listId) {
+  //   this.activeList = await this.list.find(listId);
+  //   this.todos = (await db.todos.where({ listId: listId }).toArray())
+  //     .map(todo => new Todo(todo))
+  //     .reverse();
+  // }
+
+  // addTodo = payload => {
+  //   const todo = new Todo({
+  //     id: uuid(),
+  //     done: false,
+  //     createdBy: null,
+  //     ModifiedBy: null,
+  //     createdAt: Date.now(),
+  //     updatedAt: null,
+  //     listId: this.activeList.id,
+  //     ...payload
+  //   });
+  //   return db.todos.put(todo).then(() => (this.todos = [todo, ...this.todos]));
+  // };
+
+  // updateTodo = (id, payload) => {
+  //   this.todo = this.todos.map(todo => {
+  //     if (todo.id === id) {
+  //       todo.update(payload);
+  //       db.todos.put(todo);
+  //     }
+  //     return todo;
+  //   });
+  // };
+
+  // removeTodo = id =>
+  //   db.todos
+  //     .delete(id)
+  //     .then(() => (this.todos = this.todos.filter(todo => todo.id !== id)));
+
+  // toggleDone = id => {
+  //   this.todos = this.todos.map(todo => {
+  //     if (todo.id === id) {
+  //       todo.done = !todo.done;
+  //       db.todos.put(todo);
+  //     }
+  //     return todo;
+  //   });
+  // };
+
+  // saveList(...args) {
+  //   return this.list.save(...args);
+  // }
 }
 
-const ObservableStore = decorate(Store, {
-  activeList: observable,
+export default decorate(Store, {
+  list: observable,
   todos: observable
-})
-
-export default new ObservableStore();
+});
