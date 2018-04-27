@@ -1,89 +1,40 @@
 import React, { Component, Fragment } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { observer } from "mobx-react";
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
-
-import Todos from 'src/components/Todos';
-import List from 'src/components/List';
-
-import store from 'src/models/store';
-import {authService} from 'src/services/firebase';
-
-import MenuTrigger from './MenuTrigger';
-import styles from './styles';
-
-
-
-class SignInScreen extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1>My App</h1>
-        <p>Please sign-in:</p>
-        <StyledFirebaseAuth uiConfig={authService.uiConfig} firebaseAuth={authService}/>
-      </div>
-    );
-  }
-}
+import Store from 'src/models/Store';
+import { authService } from 'src/services/firebase';
+import Login from './Login';
+import Home from './Home';
 
 class App extends Component {
   state = {
-    isOpen: false,
-    isLoading: false
+    user: null
   };
 
-  componentDidMount(){
-    
-    authService.onAuthStateChanged(user => {
-      if (user) {
-        console.log('User', user)
-      } else {
-        console.log('not log')
-      }
-    })
+  componentDidMount() {
+    this.unregisterAuthObserver = authService.onAuthStateChanged(user =>
+      this.setState({
+        user: user || null
+      })
+    );
   }
 
-  toggleSidebar = () => this.setState({ isOpen: !this.state.isOpen });
+  componentWillUnmount() {
+    this.unregisterAuthObserver();
+  }
 
   render() {
-    const { isOpen } = this.state;
+    const { user } = this.state;
 
     return (
       <Fragment>
-        <header {...styles.header}>
-          <nav>
-            <MenuTrigger isOpen={isOpen} onToggle={this.toggleSidebar} />
-            <span>Navigation</span>
-          </nav>
-        </header>
-        <aside {...styles.sidebar(isOpen)}>
-          <List listStore={store.list} toggleSidebar={this.toggleSidebar} />
-        </aside>
-        <section {...styles.main}>
-        <Switch>
-          <Route
-            exact
-            path="/list/:id"
-            render={({ match }) => (
-              <Todos
-                store={store}
-                activeListId={match.params.id}
-              />
-            )}
-          />
-          <Route 
-            exact
-            path='/auth'
-            component={SignInScreen}
-          />
-          </Switch>
-        </section>
-        <div id="foobar">plpo</div>
-        <footer {...styles.footer}>FOOTER</footer>
+        {this.state.user ? (
+          <Home store={new Store(user)} />
+        ) : (
+          <Login authService={authService} />
+        )}
       </Fragment>
     );
   }
 }
 
-export default observer(App);
+export default App;
