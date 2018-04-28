@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
-// import Todos from 'src/components/Todos';
+ import Todos from 'src/components/Todos';
  import List from 'src/components/List';
 
 // import store from 'src/models/store';
@@ -34,13 +34,13 @@ class Home extends Component {
         </aside>
         <section {...styles.main}>
           main
-          {/* <Route
+          <Route
             exact
             path="/list/:id"
             render={({ match }) => (
-              <Todos store={store} activeListId={match.params.id} />
+              <Todos store={this.props.store} listId={match.params.id} />
             )}
-          /> */}
+          />
         </section>
         <footer {...styles.footer}>FOOTER</footer>
       </Fragment>

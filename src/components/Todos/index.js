@@ -25,15 +25,15 @@ class TodoList extends Component {
   positionRatio = 0;
 
   componentDidMount() {
-    this.loadTodos(this.props.activeListId);
+    this.loadTodos(this.props.listId);
   }
 
-  componentWillReceiveProps({ activeListId }) {
-    this.loadTodos(activeListId);
+  componentWillReceiveProps({ listId }) {
+    this.loadTodos(listId);
   }
 
-  loadTodos(activeListId) {
-    this.props.store.fetchTodos(activeListId);
+  loadTodos(listId) {
+    this.props.store.fetchTodoList(listId);
   }
 
   filter = e => {
@@ -46,10 +46,10 @@ class TodoList extends Component {
   };
 
   renderTodos() {
-    const { toggleDone, updateTodo, removeTodo, todos} = this.props.store;
+    const { toggleDone, updateTodo, removeTodo, todoList} = this.props.store;
     const { filter } = this.state;
 
-    return todos.filter(this.applyFilter[filter]).map(todo => (
+    return todoList.filter(this.applyFilter[filter]).map(todo => (
       <Transition
         key={todo.id}
         timeout={750}
@@ -72,7 +72,6 @@ class TodoList extends Component {
   render() {
     const { store } = this.props;
     //const { percentage, number } = store.getDone();
-
     return (
       <section>
         <TodoTitle

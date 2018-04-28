@@ -3,12 +3,13 @@ import { decorate, observable } from 'mobx';
 // import List from './List';
 import User from './User';
 import { dbService, authService } from 'src/services/firebase';
-
-//import { db, uuid } from 'src/utils';
+import { uuid } from 'src/utils';
 
 class Store {
   user = null;
-  list = [];
+  userList = [];
+  todoList = [];
+  activeListId = null;
 
   constructor(user) {
     this.user = new User(user);
@@ -17,14 +18,13 @@ class Store {
 
   fetchUserList() {
     dbService
-      .collection('lists')
+      .collection('userLists')
       .where(this.user.uid, '==', true)
-      .orderBy('createdAt', 'asc')
+     // .orderBy('createdAt', 'asc')
       .get()
       .then(({ empty, docs }) => {
         if (!empty) {
-          this.list =  docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          console.log(this.list)
+          this.userList = docs.map(doc => ({ id: doc.id, ...doc.data() }));
         } else {
           this.addDefaultList();
         }
@@ -32,17 +32,64 @@ class Store {
       .catch(err => console.log(err));
   }
 
-  addDefaultList(){
-    const batch = dbService.batch();
-    batch.set(dbService.collection('lists').doc(), this.createList('To-Do', false));
-    batch.set(dbService.collection('lists').doc(), this.createList('Grocery', false));
+  fetchTodoList(listId) {
+    this.activeListId = listId;
+    dbService
+      .collection('todoList')
+      .doc(listId)
+      .collection('todos')
+      .where(this.user.uid, '==', true)
+      .get()
+      .then(({ empty, docs }) => {
+        if(!empty) {
+          this.todoList = docs.map(doc => doc.data())
+        }
+      })
+      .catch(err => console.log(err));
+  }
 
-    batch.commit().then(commit => console.log('commit',commit)).catch(err => console.log(err));
+  addDefaultList() {
+    const batch = dbService.batch();
+    batch.set(
+      dbService.collection('userLists').doc(),
+      this.createList('To-Do', false)
+    );
+    batch.set(
+      dbService.collection('userLists').doc(),
+      this.createList('Grocery', false)
+    );
+
+    batch
+      .commit()
+      .then(commit => console.log('commit', commit))
+      .catch(err => console.log(err));
   }
 
   createList(label, writable = true) {
-    return { label, writable, [this.user.uid]: true, createdAt: Date.now() }
+    return { label, writable, [this.user.uid]: true, createdAt: Date.now() };
   }
+
+  addTodo = payload => {
+    const todo = {
+      id: uuid(),
+      done: false,
+      createdBy: null,
+      ModifiedBy: null,
+      createdAt: Date.now(),
+      updatedAt: null,
+      [this.user.uid]: true,
+      ...payload
+    };
+
+    dbService
+      .collection('todoList')
+      .doc(this.activeListId)
+      .collection('todos')
+      .doc(todo.id)
+      .set(todo)
+      .then(() => console.log('added'))
+      .catch(err => console.log(err));
+  };
 
   // getDone() {
   //   const done = this.todos.reduce(
@@ -107,6 +154,6 @@ class Store {
 }
 
 export default decorate(Store, {
-  list: observable,
-  todos: observable
+  userList: observable,
+  todoList: observable
 });

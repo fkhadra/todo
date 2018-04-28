@@ -17,7 +17,7 @@ const List = ({ store, toggleSidebar }) => {
   return (
     <nav>
       <ul {...styles.list}>
-        {store.list.map(({ id, label }) => (
+        {store.userList.map(({ id, label }) => (
           <li key={id}>
             <NavLink onClick={toggleSidebar} to={`/list/${id}`}>
               <img src={listIcon} alt="List" />
