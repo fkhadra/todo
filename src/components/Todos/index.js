@@ -49,7 +49,7 @@ class TodoList extends Component {
     const { toggleDone, updateTodo, removeTodo, todoList} = this.props.store;
     const { filter } = this.state;
 
-    return todoList.filter(this.applyFilter[filter]).map(todo => (
+    return Array.from(todoList.values()).filter(this.applyFilter[filter]).map(todo => (
       <Transition
         key={todo.id}
         timeout={750}
@@ -71,7 +71,7 @@ class TodoList extends Component {
 
   render() {
     const { store } = this.props;
-    //const { percentage, number } = store.getDone();
+
     return (
       <section>
         <TodoTitle
@@ -99,9 +99,6 @@ class TodoList extends Component {
               />
             </div>
           </header>
-          {/* <div>
-            <div {...styles.progressBar} style={{ width: `${percentage}%` }} />
-          </div> */}
         </section>
         <div>
           <TransitionGroup {...styles.list} component="ul">

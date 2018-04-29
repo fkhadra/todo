@@ -3,11 +3,18 @@ import { observer } from 'mobx-react';
 import Input from 'src/components/Input';
 import { css } from 'glamor';
 
+// const anim = css.keyframes({
+//   from:
+// })
+
 const styles = {
   input: css({
     padding: '8px',
-    border: 'none'
-  })
+    border: 'none',
+    position: 'relative',
+    display: 'inline-block'
+  }),
+  button: css({})
 };
 
 class TodoTitle extends Component {
@@ -16,11 +23,12 @@ class TodoTitle extends Component {
   };
 
   toggleEdit = () =>
-    this.props.store.activeList.writable && this.setState({ editing: !this.state.editing });
+    this.props.store.activeList.writable &&
+    this.setState({ editing: !this.state.editing });
 
   handleSubmit = (value, success) => {
     if (success) {
-      this.props.store.saveList({ id: this.props.store.activeList.id, label: value });
+      this.props.store.saveUserList({ label: value });
     }
     this.toggleEdit();
   };
@@ -30,13 +38,15 @@ class TodoTitle extends Component {
       <h2>
         {this.state.editing ? (
           <div {...styles.input}>
-            <Input
-              initialValue={this.props.store.activeList.label}
-              handleSubmit={this.handleSubmit}
-            />
+            <div>
+              <Input initialValue={'Foo'} handleSubmit={this.handleSubmit} />
+              <button>Save</button>
+            </div>
           </div>
         ) : (
-          <span onDoubleClick={this.toggleEdit}>{this.props.store.activeList && this.props.store.activeList.label}</span>
+          <span onDoubleClick={this.toggleEdit}>
+            {this.props.store.activeList && this.props.store.activeList.label}
+          </span>
         )}
       </h2>
     );

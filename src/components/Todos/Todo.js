@@ -5,6 +5,8 @@ import Checkmark from './Checkmark';
 import Input from 'src/components/Input';
 import deleteIcon from 'src/assets/delete.svg';
 
+import { observer } from "mobx-react";
+
 const styles = {
   container: css({
     display: 'flex',
@@ -64,7 +66,7 @@ const styles = {
   })
 };
 
-export default class Todo extends Component {
+ class Todo extends Component {
   state = {
     editing: false
   };
@@ -127,3 +129,5 @@ export default class Todo extends Component {
     );
   }
 }
+
+export default observer(Todo);

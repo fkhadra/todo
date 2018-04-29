@@ -11,11 +11,14 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.unregisterAuthObserver = authService.onAuthStateChanged(user =>
+    this.unregisterAuthObserver = authService.onAuthStateChanged(user => {
+      console.log('onAuthStateChanged');
+      console.log(user)
       this.setState({
         user: user || null
       })
-    );
+    })
+      
   }
 
   componentWillUnmount() {

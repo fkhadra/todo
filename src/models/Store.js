@@ -1,8 +1,6 @@
 import { decorate, observable } from 'mobx';
-// import Todo from './Todo';
-// import List from './List';
 import User from './User';
-import { dbService } from 'src/services/firebase';
+import { dbService, authService } from 'src/services/firebase';
 import { uuid } from 'src/utils';
 
 class Store {
@@ -14,6 +12,10 @@ class Store {
   constructor(user) {
     this.user = new User(user);
     this.fetchUserList();
+  }
+
+  signOut(){
+    authService.signOut().then(() => console.log('signout')).catch(err=> console.log(err));
   }
 
   fetchUserList() {
@@ -123,7 +125,7 @@ class Store {
 
   updateTodo = (id, payload) => {
     const todo = this.todoList.get(id);
-    this.todoList.set(id, { ...todo, ...payload });
+    this.todoList.set(id, { ...todo, ...payload, updatedAt: Date.now() });
     dbService
       .collection('todoList')
       .doc(this.activeList.id)

@@ -6,18 +6,17 @@ import addListIcon from 'src/assets/add-list.svg';
 import listIcon from 'src/assets/list.svg';
 import styles from './styles';
 
-import { uuid } from 'src/utils';
-
 const List = ({ store, toggleSidebar }) => {
-  const newTodoListId = uuid();
+  const newTodoListId = store.genTodoListId();
   const createNewTodoList = () => {
-    store.save({ id: newTodoListId }) && toggleSidebar();
+    store.addUserList(newTodoListId);
+    toggleSidebar();
   };
 
   return (
     <nav>
       <ul {...styles.list}>
-        {store.userList.map(({ id, label }) => (
+        {Array.from(store.userList.values()).map(({ id, label }) => (
           <li key={id}>
             <NavLink onClick={toggleSidebar} to={`/list/${id}`}>
               <img src={listIcon} alt="List" />
