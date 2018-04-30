@@ -14,8 +14,11 @@ class Store {
     this.fetchUserList();
   }
 
-  signOut(){
-    authService.signOut().then(() => console.log('signout')).catch(err=> console.log(err));
+  signOut() {
+    authService
+      .signOut()
+      .then(() => console.log('signout'))
+      .catch(err => console.log(err));
   }
 
   fetchUserList() {
@@ -173,6 +176,16 @@ class Store {
       )
       .catch(err => console.log(err));
   }
+
+  // shareList(email) {
+  //   authService.fetchProvidersForEmail(email).then(payload => {
+  //     if (payload.length === 0) {
+  //       console.log('User dont exist');
+  //     } else {
+  //       authService.
+  //     }
+  //   });
+  // }
 }
 
 export default decorate(Store, {

@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import Input from 'src/components/Input';
 import { css } from 'glamor';
-
-// const anim = css.keyframes({
-//   from:
-// })
+import Icon from '@fortawesome/react-fontawesome';
 
 const styles = {
   input: css({
@@ -48,6 +45,7 @@ class TodoTitle extends Component {
             {this.props.store.activeList && this.props.store.activeList.label}
           </span>
         )}
+        <Icon icon="share-alt" />
       </h2>
     );
   }

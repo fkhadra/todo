@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { observer } from "mobx-react";
 import { TransitionGroup, Transition } from 'react-transition-group';
+import Modal from './Modal';
 
 import styles from './styles';
 import Todo from './Todo';
@@ -11,9 +12,12 @@ import listIcon from 'src/assets/list.svg';
 import scheduleIcon from 'src/assets/schedule.svg';
 import checkIcon from 'src/assets/check.svg';
 
+import ShareForm from "./ShareForm";
+
 class TodoList extends Component {
   state = {
     filter: 'ALL',
+    visible: false
   };
 
   applyFilter = {
@@ -77,6 +81,7 @@ class TodoList extends Component {
         <TodoTitle
           store={store}
         />
+        <button onClick={() => this.setState({ visible: true })}>Modal toggle</button>
         <TodoInput addTodo={store.addTodo} />
         <section {...styles.status}>
           <header>
@@ -105,6 +110,11 @@ class TodoList extends Component {
             {this.renderTodos()}
           </TransitionGroup>
         </div>
+
+        <Modal visible={this.state.visible} title="Gello">
+          <ShareForm />
+        </Modal>
+          
       </section>
     );
   }
