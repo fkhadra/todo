@@ -11,7 +11,18 @@ class Store {
 
   constructor(user) {
     this.user = new User(user);
+    this.map()
     this.fetchUserList();
+    this.shareList()
+  }
+
+  map(){
+    dbService.collection('profile').where('uid', '==', this.user.uid).get()
+    .then(async ({ empty }) => {
+      if(empty){
+        await dbService.collection('profile').add({ ...this.user });
+      }
+    }).catch(err => console.log(err))
   }
 
   signOut() {
@@ -177,15 +188,18 @@ class Store {
       .catch(err => console.log(err));
   }
 
-  // shareList(email) {
-  //   authService.fetchProvidersForEmail(email).then(payload => {
-  //     if (payload.length === 0) {
-  //       console.log('User dont exist');
-  //     } else {
-  //       authService.
-  //     }
-  //   });
-  // }
+  shareList(a) {
+    let email = 'fdkhadra@gmail.com';
+    authService.fetchProvidersForEmail(email).then(async payload => {
+      if (payload.length === 0) {
+        console.log('User dont exist');
+      } else {
+        console.log('User xist');
+        const { docs } = await dbService.collection('profile').where('email', '==', email).get();
+        console.log('profie', docs[0].data())
+      }
+    });
+  }
 }
 
 export default decorate(Store, {
