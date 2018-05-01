@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from "mobx-react";
+import { observer } from 'mobx-react';
 import { TransitionGroup, Transition } from 'react-transition-group';
 import Modal from './Modal';
 
@@ -12,7 +12,7 @@ import listIcon from 'src/assets/list.svg';
 import scheduleIcon from 'src/assets/schedule.svg';
 import checkIcon from 'src/assets/check.svg';
 
-import ShareForm from "./ShareForm";
+import ShareForm from './ShareForm';
 
 class TodoList extends Component {
   state = {
@@ -40,6 +40,11 @@ class TodoList extends Component {
     this.props.store.fetchTodoList(listId);
   }
 
+  toggleModal = () =>
+    this.setState({
+      visible: !this.state.visible
+    });
+
   filter = e => {
     const { width } = this.filterRef.getBoundingClientRect();
     const ratio = width / 3;
@@ -50,27 +55,29 @@ class TodoList extends Component {
   };
 
   renderTodos() {
-    const { toggleDone, updateTodo, removeTodo, todoList} = this.props.store;
+    const { toggleDone, updateTodo, removeTodo, todoList } = this.props.store;
     const { filter } = this.state;
 
-    return Array.from(todoList.values()).filter(this.applyFilter[filter]).map(todo => (
-      <Transition
-        key={todo.id}
-        timeout={750}
-        onEnter={node => node.classList.add(styles.enter)}
-        onEntered={node => node.classList.remove(styles.enter)}
-        onExit={styles.onExit}
-      >
-        <li>
-          <Todo
-            todo={todo}
-            toggleDone={toggleDone}
-            updateTodo={updateTodo}
-            removeTodo={removeTodo}
-          />
-        </li>
-      </Transition>
-    ));
+    return Array.from(todoList.values())
+      .filter(this.applyFilter[filter])
+      .map(todo => (
+        <Transition
+          key={todo.id}
+          timeout={750}
+          onEnter={node => node.classList.add(styles.enter)}
+          onEntered={node => node.classList.remove(styles.enter)}
+          onExit={styles.onExit}
+        >
+          <li>
+            <Todo
+              todo={todo}
+              toggleDone={toggleDone}
+              updateTodo={updateTodo}
+              removeTodo={removeTodo}
+            />
+          </li>
+        </Transition>
+      ));
   }
 
   render() {
@@ -78,10 +85,8 @@ class TodoList extends Component {
 
     return (
       <section>
-        <TodoTitle
-          store={store}
-        />
-        <button onClick={() => this.setState({ visible: true })}>Modal toggle</button>
+        <TodoTitle store={store} />
+        <button onClick={this.toggleModal}>Modal toggle</button>
         <TodoInput addTodo={store.addTodo} />
         <section {...styles.status}>
           <header>
@@ -111,10 +116,13 @@ class TodoList extends Component {
           </TransitionGroup>
         </div>
 
-        <Modal visible={this.state.visible} title="Gello">
+        <Modal
+          visible={this.state.visible}
+          title="Share with friends"
+          close={this.toggleModal}
+        >
           <ShareForm />
         </Modal>
-          
       </section>
     );
   }

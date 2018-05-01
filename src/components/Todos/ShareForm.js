@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import Icon from "@fortawesome/react-fontawesome";
+import { css } from "glamor";
+
+const styles = {
+  icon: css({
+    display: 'flex',
+  })
+}
 
 class ShareForm extends Component {
   state = {
@@ -11,8 +18,12 @@ class ShareForm extends Component {
   render() {
     return (
       <section>
-        <label htmlFor="email">
-          <Icon icon="envelope"/>
+        <div >
+        <div {...styles.icon}>
+        <span>
+            <Icon icon="at"/>
+          </span>
+        </div>
           <input
           type="email"
           id="email"
@@ -21,7 +32,7 @@ class ShareForm extends Component {
           onChange={this.handleInput}
           placeholder="Enter email"
         />
-        </label>
+        </div>
         <button>Submit</button>
       </section>
     );
