@@ -11,18 +11,25 @@ class Store {
 
   constructor(user) {
     this.user = new User(user);
-    this.map()
+    this.registerProfile();
     this.fetchUserList();
-    this.shareList()
+    // this.shareList()
   }
 
-  map(){
-    dbService.collection('profile').where('uid', '==', this.user.uid).get()
-    .then(async ({ empty }) => {
-      if(empty){
-        await dbService.collection('profile').add({ ...this.user });
-      }
-    }).catch(err => console.log(err))
+  registerProfile() {
+    dbService
+      .collection('profiles')
+      .doc(this.user.uid)
+      .get()
+      .then(async ({ exists }) => {
+        if (!exists) {
+          await dbService
+            .collection('profiles')
+            .doc(this.user.uid)
+            .set({ ...this.user });
+        }
+      })
+      .catch(err => console.log(err));
   }
 
   signOut() {
@@ -34,15 +41,12 @@ class Store {
 
   fetchUserList() {
     dbService
-      .collection('userLists')
-      .where(this.user.uid, '==', true)
-      //.orderBy('createdAt')
+      .collection('lists')
+      .where(`member.${this.user.uid}`, '==', true)
       .get()
       .then(({ empty, docs }) => {
         if (!empty) {
-          docs.forEach(doc =>
-            this.userList.set(doc.id, { id: doc.id, ...doc.data() })
-          );
+          docs.forEach(doc => this.userList.set(doc.id, doc.data()));
         } else {
           this.addDefaultList();
         }
@@ -52,18 +56,28 @@ class Store {
 
   addDefaultList() {
     const batch = dbService.batch();
+    const ref = dbService.collection('lists');
+    let id = this.genListId();
+
     batch.set(
-      dbService.collection('userLists').doc(),
-      this.createList({ label: 'To-Do', writable: false })
+      ref.doc(id),
+      this.userList
+        .set(id, this.createList({ id, label: 'To-Do', writable: false }))
+        .get(id)
     );
+
+    id = this.genListId();
+
     batch.set(
-      dbService.collection('userLists').doc(),
-      this.createList({ label: 'Grocery', writable: false })
+      ref.doc(id),
+      this.userList
+        .set(id, this.createList({ id, label: 'Grocery', writable: false }))
+        .get(id)
     );
 
     batch
       .commit()
-      .then(commit => console.log('commit', commit))
+      .then(() => console.log('commit'))
       .catch(err => console.log(err));
   }
 
@@ -71,7 +85,10 @@ class Store {
     return {
       label: 'Untitled',
       writable: true,
-      [this.user.uid]: true,
+      owner: this.user.uid,
+      member: {
+        [this.user.uid]: true
+      },
       createdAt: Date.now(),
       ...payload
     };
@@ -81,8 +98,8 @@ class Store {
     dbService
       .collection('todoList')
       .doc(listId)
-      .collection('todos')
-      .where(this.user.uid, '==', true)
+      .collection('todo')
+      .where(`member.${this.user.uid}`, '==', true)
       .get()
       .then(({ empty, docs }) => {
         this.activeList = this.userList.get(listId);
@@ -103,14 +120,17 @@ class Store {
       ModifiedBy: null,
       createdAt: Date.now(),
       updatedAt: null,
-      [this.user.uid]: true,
+      owner: this.user.uid,
+      member: {
+        [this.user.uid]: true
+      },
       ...payload
     };
 
     dbService
       .collection('todoList')
       .doc(this.activeList.id)
-      .collection('todos')
+      .collection('todo')
       .doc(todo.id)
       .set(todo)
       .then(() => this.todoList.set(todo.id, todo))
@@ -121,7 +141,7 @@ class Store {
     dbService
       .collection('todoList')
       .doc(this.activeList.id)
-      .collection('todos')
+      .collection('todo')
       .doc(todoId)
       .delete()
       .then(() => {
@@ -143,7 +163,7 @@ class Store {
     dbService
       .collection('todoList')
       .doc(this.activeList.id)
-      .collection('todos')
+      .collection('todo')
       .doc(id)
       .update(payload)
       .then(() => {
@@ -156,24 +176,23 @@ class Store {
     return dbService.collection('todoList').doc().id;
   }
 
+  genListId() {
+    return dbService.collection('lists').doc().id;
+  }
+
   addUserList(id) {
-    const newList = this.createList();
+    const newList = this.createList({ id });
     dbService
-      .collection('userLists')
+      .collection('lists')
       .doc(id)
       .set(newList)
-      .then(
-        () =>
-          (this.activeList = this.userList
-            .set(id, { id: id, ...newList })
-            .get(id))
-      )
+      .then(() => (this.activeList = this.userList.set(id, newList).get(id)))
       .catch(err => console.log(err));
   }
 
   saveUserList(payload) {
     dbService
-      .collection('userLists')
+      .collection('lists')
       .doc(this.activeList.id)
       .update(payload)
       .then(
@@ -195,8 +214,11 @@ class Store {
         console.log('User dont exist');
       } else {
         console.log('User xist');
-        const { docs } = await dbService.collection('profile').where('email', '==', email).get();
-        console.log('profie', docs[0].data())
+        const { docs } = await dbService
+          .collection('profile')
+          .where('email', '==', email)
+          .get();
+        console.log('profie', docs[0].data());
       }
     });
   }
