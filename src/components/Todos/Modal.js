@@ -23,8 +23,8 @@ const styles = {
     css({
       zIndex: 1000,
       borderRadius: '4px',
-      width: '300px',
-      height: '200px',
+      width: '85%',
+      height: '40%',
       transform: visible ? 'scale3d(1,1,1)' : 'scale3d(0.8,0.8,1)',
       transition: 'transform 0.3s',
       background: '#333'

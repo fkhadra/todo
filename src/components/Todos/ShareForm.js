@@ -5,6 +5,13 @@ import { css } from "glamor";
 const styles = {
   icon: css({
     display: 'flex',
+  }),
+  input: css({
+    padding: '8px',
+    width: '100%',
+    outline: 'none',
+    boxSizing: 'border-box',
+    border: 'none',
   })
 }
 
@@ -19,12 +26,13 @@ class ShareForm extends Component {
     return (
       <section>
         <div >
-        <div {...styles.icon}>
+        {/* <div {...styles.icon}>
         <span>
             <Icon icon="at"/>
           </span>
-        </div>
+        </div> */}
           <input
+          {...styles.input}
           type="email"
           id="email"
           name="email"
@@ -33,7 +41,7 @@ class ShareForm extends Component {
           placeholder="Enter email"
         />
         </div>
-        <button>Submit</button>
+        {/* <button>Submit</button> */}
       </section>
     );
   }
