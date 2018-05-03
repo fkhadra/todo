@@ -6,7 +6,7 @@ import addListIcon from 'src/assets/add-list.svg';
 import listIcon from 'src/assets/list.svg';
 import styles from './styles';
 
-const List = ({ store, toggleSidebar }) => {
+const Sidenav = ({ store, toggleSidebar }) => {
   const newTodoListId = store.genTodoListId();
   const createNewTodoList = () => {
     store.addUserList(newTodoListId);
@@ -35,4 +35,4 @@ const List = ({ store, toggleSidebar }) => {
   );
 };
 
-export default observer(List);
+export default observer(Sidenav);

@@ -3,12 +3,10 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 import { observer } from 'mobx-react';
 
-import Todos from 'src/components/Todos';
-import List from 'src/components/List';
+import TodoList from 'src/components/TodoList';
+import Sidenav from 'src/components/Sidenav';
 
-// import store from 'src/models/store';
-
-import MenuTrigger from './MenuTrigger';
+//import MenuTrigger from './MenuTrigger';
 import styles from './styles';
 
 class Home extends Component {
@@ -28,7 +26,13 @@ class Home extends Component {
         <Fragment>
           <header {...styles.header}>
             <nav>
-              <MenuTrigger isOpen={isOpen} onToggle={this.toggleSidebar} />
+              <div
+                {...styles.sidebarTrigger(isOpen)}
+                onClick={this.toggleSidebar}
+                role="button"
+              >
+                <span />
+              </div>
               <span>Navigation</span>
               <button onClick={store.signOut}>Sign Out</button>
             </nav>
@@ -36,7 +40,7 @@ class Home extends Component {
           <aside {...styles.sidebar(isOpen)}>
             <Route
               render={props => (
-                <List
+                <Sidenav
                   store={store}
                   toggleSidebar={this.toggleSidebar}
                   {...props}
@@ -49,7 +53,7 @@ class Home extends Component {
               exact
               path="/list/:id"
               render={({ match }) => (
-                <Todos store={store} listId={match.params.id} />
+                <TodoList store={store} listId={match.params.id} />
               )}
             />
           </section>
