@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Icon from '@fortawesome/react-fontawesome';
 import { css } from 'glamor';
+import Store from 'src/models/Store';
 
 const styles = {
   form: css({
@@ -58,10 +59,15 @@ const styles = {
 
 class ShareForm extends Component {
   state = {
-    email: ''
+    email: '',
+    loading: false
   };
 
   handleInput = e => this.setState({ [e.target.name]: e.target.value });
+
+  shareList = () => {
+    this.props.store.shareList(this.state.email);
+  }
 
   render() {
     return (
@@ -89,7 +95,7 @@ class ShareForm extends Component {
         </div>
         <div {...styles.buttons}>
           <button {...styles.cancel}>Cancel</button>
-          <button {...styles.submit}>Submit</button>
+          <button {...styles.submit} >Submit</button>
         </div>
       </section>
     );

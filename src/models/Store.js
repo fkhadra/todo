@@ -13,7 +13,7 @@ class Store {
     this.user = new User(user);
     this.registerProfile();
     this.fetchUserList();
-    // this.shareList()
+  //  this.shareList('fadi.khadra@bisnode.com').then(() => {});
   }
 
   registerProfile() {
@@ -207,18 +207,71 @@ class Store {
       .catch(err => console.log(err));
   }
 
-  shareList(a) {
-    let email = 'fdkhadra@gmail.com';
-    authService.fetchProvidersForEmail(email).then(async payload => {
-      if (payload.length === 0) {
+  // findUserByEmail(email) {
+  //   return new Promise(async (resolve, reject) => {
+  //     const { length } = await authService.fetchProvidersForEmail(email);
+
+  //     if (length === 0) {
+  //       return reject();
+  //     }
+  //     const { docs } = await dbService
+  //       .collection('profiles')
+  //       .where('email', '==', email)
+  //       .get();
+  //     return resolve(docs[0].data());
+  //   });
+  // }
+
+  shareList(email) {
+    return new Promise(async (resolve, reject) => {
+      const response = await authService.fetchProvidersForEmail(email);
+      if (response.length === 0) {
         console.log('User dont exist');
       } else {
-        console.log('User xist');
         const { docs } = await dbService
-          .collection('profile')
+          .collection('profiles')
           .where('email', '==', email)
           .get();
-        console.log('profie', docs[0].data());
+        const profile = docs[0].data();
+
+
+
+        const batch = dbService.batch();
+        const payload = {
+          [`member.${profile.uid}`]: true
+        };
+
+        batch.update(
+          dbService.collection('lists').doc(this.activeList.id),
+          payload
+        );
+
+        this.todoList.forEach(({ id }) => {
+          batch.update(
+            dbService
+              .collection('todoList')
+              .doc(this.activeList.id)
+              .collection('todo')
+              .doc(id),
+            payload
+          );
+        });
+
+        batch.set(
+          dbService
+            .collection('buddies')
+            .doc(this.user.uid)
+            .collection('buddy')
+            .doc(profile.uid),
+          profile
+        );
+
+        batch
+        .commit()
+        .then(() => console.log('commit'))
+        .catch(err => console.log(err));
+
+        //console.log('profie', docs[0].data());
       }
     });
   }

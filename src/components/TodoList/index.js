@@ -17,7 +17,7 @@ import ShareForm from './ShareForm';
 class TodoList extends Component {
   state = {
     filter: 'ALL',
-    visible: false
+    displayShareForm: false
   };
 
   applyFilter = {
@@ -40,9 +40,9 @@ class TodoList extends Component {
     this.props.store.fetchTodoList(listId);
   }
 
-  toggleModal = () =>
+  toggleShareForm = () =>
     this.setState({
-      visible: !this.state.visible
+      displayShareForm: !this.state.displayShareForm
     });
 
   filter = e => {
@@ -85,8 +85,7 @@ class TodoList extends Component {
 
     return (
       <section>
-        <TodoTitle store={store} />
-        <button onClick={this.toggleModal}>Modal toggle</button>
+        <TodoTitle store={store} toggleShareForm={this.toggleShareForm} />
         <TodoInput addTodo={store.addTodo} />
         <section {...styles.status}>
           <header>
@@ -117,9 +116,9 @@ class TodoList extends Component {
         </div>
 
         <Modal
-          visible={this.state.visible}
+          visible={this.state.displayShareForm}
           title="Share with friends"
-          close={this.toggleModal}
+          close={this.toggleShareForm}
         >
           <ShareForm />
         </Modal>

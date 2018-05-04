@@ -31,6 +31,8 @@ class TodoTitle extends Component {
   };
 
   render() {
+    const { store, toggleShareForm } = this.props;
+
     return (
       <h2>
         {this.state.editing ? (
@@ -42,10 +44,10 @@ class TodoTitle extends Component {
           </div>
         ) : (
           <span onDoubleClick={this.toggleEdit}>
-            {this.props.store.activeList && this.props.store.activeList.label}
+            {store.activeList && store.activeList.label}
           </span>
         )}
-        <Icon icon="share-alt" />
+        <Icon icon="share-alt" onClick={toggleShareForm} />
       </h2>
     );
   }
