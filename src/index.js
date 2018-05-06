@@ -7,8 +7,6 @@ import registerServiceWorker from './registerServiceWorker';
 
 import fontawesome from '@fortawesome/fontawesome'
 import solid from '@fortawesome/fontawesome-free-solid'
-//import faCheckSquare from '@fortawesome/fontawesome-free-solid/faCheckSquare'
-//import faCoffee from '@fortawesome/fontawesome-free-solid/faCoffee'
 
 fontawesome.library.add(solid);
 

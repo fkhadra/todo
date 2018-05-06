@@ -4,16 +4,19 @@ import Store from 'src/models/Store';
 import { authService } from 'src/services/firebase';
 import Login from './Login';
 import Home from './Home';
+import LoadingScreen from './LoadingScreen';
 
 class App extends Component {
   state = {
-    user: null
+    user: null,
+    initialLoad: true
   };
 
   componentDidMount() {
     this.unregisterAuthObserver = authService.onAuthStateChanged(user => {
       this.setState({
-        user: user || null
+        user: user || null,
+        initialLoad: false
       });
     });
   }
@@ -23,16 +26,16 @@ class App extends Component {
   }
 
   render() {
-    const { user } = this.state;
-
+    const { user, initialLoad } = this.state;
+    
     return (
-      <Fragment>
+      <LoadingScreen isLoading={initialLoad}>
         {this.state.user ? (
           <Home store={new Store(user)} />
         ) : (
           <Login authService={authService} />
         )}
-      </Fragment>
+      </LoadingScreen>
     );
   }
 }
