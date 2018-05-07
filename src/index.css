@@ -20,3 +20,7 @@ a{
 a:visited{
   color: #ffffff;
 }
+
+.firebaseui-container {
+  background-color: #2c2f34 !important;
+}
