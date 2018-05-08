@@ -24,3 +24,16 @@ a:visited{
 .firebaseui-container {
   background-color: #2c2f34 !important;
 }
+
+.menu{
+    position: absolute;
+      width: 150px;
+      top: 0px;
+      right: 0;
+      height: 200px;
+      background: #fff;
+      transform: scale(1);
+      transform-origin: right top;
+      transition: transform 0.4s;
+      z-index: 0
+}

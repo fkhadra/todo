@@ -8,6 +8,7 @@ import Sidenav from 'src/components/Sidenav';
 
 //import MenuTrigger from './MenuTrigger';
 import styles from './styles';
+import Header from './Header';
 
 class Home extends Component {
   state = {
@@ -24,19 +25,7 @@ class Home extends Component {
     return (
       <Router>
         <Fragment>
-          <header {...styles.header}>
-            <nav>
-              <div
-                {...styles.sidebarTrigger(isOpen)}
-                onClick={this.toggleSidebar}
-                role="button"
-              >
-                <span />
-              </div>
-              <span>Navigation</span>
-              <button onClick={store.signOut}>Sign Out</button>
-            </nav>
-          </header>
+          <Header isSidebarOpen={isOpen} user={store.user} toggleSidebar={this.toggleSidebar} />
           <aside {...styles.sidebar(isOpen)}>
             <Route
               render={props => (
