@@ -65,8 +65,8 @@ class ShareForm extends Component {
 
   handleInput = e => this.setState({ [e.target.name]: e.target.value });
 
-  shareList = () => {
-    this.props.store.shareList(this.state.email);
+  shareList = async () => {
+    await this.props.store.shareList(this.state.email);
   }
 
   render() {
@@ -95,7 +95,7 @@ class ShareForm extends Component {
         </div>
         <div {...styles.buttons}>
           <button {...styles.cancel}>Cancel</button>
-          <button {...styles.submit} >Submit</button>
+          <button {...styles.submit} onClick={this.shareList}>Submit</button>
         </div>
       </section>
     );

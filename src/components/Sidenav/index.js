@@ -12,9 +12,9 @@ const Sidenav = ({ store, toggleSidebar }) => {
     store.addUserList(newTodoListId);
     toggleSidebar();
   };
-
   return (
     <nav>
+      <h3>Owned</h3>
       <ul {...styles.list}>
         {Array.from(store.userList.values()).map(({ id, label }) => (
           <li key={id}>
@@ -31,6 +31,7 @@ const Sidenav = ({ store, toggleSidebar }) => {
           </NavLink>
         </li>
       </ul>
+      <h4>Shared</h4>
     </nav>
   );
 };

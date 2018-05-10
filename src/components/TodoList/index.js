@@ -120,7 +120,7 @@ class TodoList extends Component {
           title="Share with friends"
           close={this.toggleShareForm}
         >
-          <ShareForm />
+          <ShareForm store={store}/>
         </Modal>
       </section>
     );

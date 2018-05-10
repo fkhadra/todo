@@ -54,7 +54,7 @@ const styles = {
         height: '2px',
         top: '48%',
         borderRadius: '1px',
-        background: 'purple',
+        background: '#cb3066',
         transformOrigin: done ? 'center left' : 'center right',
         transform: done ? 'scaleX(1)' : 'scaleX(0)',
         transition: 'transform 0.5s cubic-bezier(0.55, 0, 0.1, 1)'

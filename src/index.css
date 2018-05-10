@@ -17,7 +17,7 @@ html {
 a{
   text-decoration: none;
 }
-a:visited{
+a:visited, a{
   color: #ffffff;
 }
 

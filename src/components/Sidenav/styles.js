@@ -13,7 +13,7 @@ export default {
       lineHeight: '30px',
       display: 'flex',
       '&.active': {
-        background: 'purple'
+        background: '#cb3066'
       }
     },
     '& span': {

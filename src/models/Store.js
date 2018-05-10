@@ -6,6 +6,7 @@ import { uuid } from 'src/utils';
 class Store {
   user = null;
   userList = new Map();
+  sharedList = new Map();
   todoList = new Map();
   activeList = null;
 
@@ -46,7 +47,14 @@ class Store {
       .get()
       .then(({ empty, docs }) => {
         if (!empty) {
-          docs.forEach(doc => this.userList.set(doc.id, doc.data()));
+          docs.forEach(doc => {
+            const payload = doc.data();
+            if(payload.owner === this.user.uid) {
+              this.userList.set(doc.id, payload)
+            } else {
+              this.sharedList.set(doc.id, payload);
+            }
+          });
         } else {
           this.addDefaultList();
         }
@@ -280,5 +288,6 @@ class Store {
 export default decorate(Store, {
   userList: observable,
   todoList: observable,
-  activeList: observable
+  activeList: observable,
+  sharedList: observable
 });
