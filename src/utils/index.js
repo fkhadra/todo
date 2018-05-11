@@ -3,8 +3,8 @@ import Dexie from 'dexie';
 const db = new Dexie('toodos');
 
 db.version(1).stores({
-  lists: "id",
-  todos: "&id, listId"
+  lists: 'id',
+  todos: '&id, listId'
 });
 
 function uuid(a) {

@@ -29,7 +29,7 @@ export default class Input extends Component {
     const value = this.state.inputValue.trim();
 
     if (value.length && (e.which === keys.ENTER || e.type === 'blur')) {
-      this.props.handleSubmit(value, true );
+      this.props.handleSubmit(value, true);
     } else if (e.which === keys.ESCAPE) {
       this.props.handleSubmit(this.props.initialValue, false);
     }
@@ -40,15 +40,15 @@ export default class Input extends Component {
     const { placeholder } = this.props;
 
     return (
-        <input
-          type="text"
-          value={inputValue}
-          placeholder={placeholder}
-          onChange={this.onInputChange}
-          onKeyPress={this.handleSubmit}
-          onBlur={this.handleSubmit}
-          autoFocus
-        />
+      <input
+        type="text"
+        value={inputValue}
+        placeholder={placeholder}
+        onChange={this.onInputChange}
+        onKeyPress={this.handleSubmit}
+        onBlur={this.handleSubmit}
+        autoFocus
+      />
     );
   }
 }

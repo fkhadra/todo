@@ -14,7 +14,7 @@ class Store {
     this.user = new User(user);
     this.registerProfile();
     this.fetchUserList();
-  //  this.shareList('fadi.khadra@bisnode.com').then(() => {});
+    //  this.shareList('fadi.khadra@bisnode.com').then(() => {});
   }
 
   registerProfile() {
@@ -49,8 +49,8 @@ class Store {
         if (!empty) {
           docs.forEach(doc => {
             const payload = doc.data();
-            if(payload.owner === this.user.uid) {
-              this.userList.set(doc.id, payload)
+            if (payload.owner === this.user.uid) {
+              this.userList.set(doc.id, payload);
             } else {
               this.sharedList.set(doc.id, payload);
             }
@@ -242,8 +242,6 @@ class Store {
           .get();
         const profile = docs[0].data();
 
-
-
         const batch = dbService.batch();
         const payload = {
           [`member.${profile.uid}`]: true
@@ -275,9 +273,9 @@ class Store {
         );
 
         batch
-        .commit()
-        .then(() => console.log('commit'))
-        .catch(err => console.log(err));
+          .commit()
+          .then(() => console.log('commit'))
+          .catch(err => console.log(err));
 
         //console.log('profie', docs[0].data());
       }
