@@ -1,10 +1,13 @@
-import React from 'react';
+import React from "react";
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
-import addListIcon from 'src/assets/add-list.svg';
+import List from './List';
+import StoreFetcher from 'src/components/StoreFetcher';
 import listIcon from 'src/assets/list.svg';
-import styles from './styles';
+import Icon from "@fortawesome/react-fontawesome";
+
+
 
 const Sidenav = ({ store, toggleSidebar }) => {
   const newTodoListId = store.genTodoListId();
@@ -14,24 +17,15 @@ const Sidenav = ({ store, toggleSidebar }) => {
   };
   return (
     <nav>
-      <h3>Owned</h3>
-      <ul {...styles.list}>
-        {Array.from(store.userList.values()).map(({ id, label }) => (
-          <li key={id}>
-            <NavLink onClick={toggleSidebar} to={`/list/${id}`}>
-              <img src={listIcon} alt="List" />
-              <span>{label}</span>
-            </NavLink>
-          </li>
-        ))}
-        <li>
-          <NavLink onClick={createNewTodoList} to={`/list/${newTodoListId}`}>
-            <img src={addListIcon} alt="Add list" />
-            <span>Create new List</span>
-          </NavLink>
-        </li>
-      </ul>
-      <h4>Shared</h4>
+      <NavLink onClick={createNewTodoList} to={`/list/${newTodoListId}`}>
+        {/* <img src={addListIcon} alt="Add list" /> */}
+        <Icon icon="plus-square" />
+        <span>Create new List</span>
+      </NavLink>
+      <StoreFetcher fetch={store.fetchUserList}>
+        <List title="Owned" list={store.userList} onListSelect={toggleSidebar} />
+        <List title="Shared" list={store.sharedList} onListSelect={toggleSidebar} />
+      </StoreFetcher>
     </nav>
   );
 };

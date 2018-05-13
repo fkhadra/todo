@@ -12,8 +12,7 @@ import Header from './Header';
 
 class Home extends Component {
   state = {
-    isOpen: false,
-    isLoading: false
+    isOpen: false
   };
 
   toggleSidebar = () => this.setState({ isOpen: !this.state.isOpen });
@@ -25,17 +24,13 @@ class Home extends Component {
     return (
       <Router>
         <Fragment>
-          <Header isSidebarOpen={isOpen} user={store.user} toggleSidebar={this.toggleSidebar} />
+          <Header
+            isSidebarOpen={isOpen}
+            user={store.user}
+            toggleSidebar={this.toggleSidebar}
+          />
           <aside {...styles.sidebar(isOpen)}>
-            <Route
-              render={props => (
-                <Sidenav
-                  store={store}
-                  toggleSidebar={this.toggleSidebar}
-                  {...props}
-                />
-              )}
-            />
+            <Sidenav store={store} toggleSidebar={this.toggleSidebar} />
           </aside>
           <section {...styles.main}>
             <Route

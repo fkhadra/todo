@@ -13,7 +13,7 @@ class Store {
   constructor(user) {
     this.user = new User(user);
     this.registerProfile();
-    this.fetchUserList();
+    //this.fetchUserList();
     //  this.shareList('fadi.khadra@bisnode.com').then(() => {});
   }
 
@@ -40,26 +40,29 @@ class Store {
       .catch(err => console.log(err));
   }
 
-  fetchUserList() {
-    dbService
-      .collection('lists')
-      .where(`member.${this.user.uid}`, '==', true)
-      .get()
-      .then(({ empty, docs }) => {
-        if (!empty) {
-          docs.forEach(doc => {
-            const payload = doc.data();
-            if (payload.owner === this.user.uid) {
-              this.userList.set(doc.id, payload);
-            } else {
-              this.sharedList.set(doc.id, payload);
-            }
-          });
-        } else {
-          this.addDefaultList();
-        }
-      })
-      .catch(err => console.log(err));
+  fetchUserList = () => {
+    return new Promise((resolve, reject) => {
+      dbService
+        .collection('lists')
+        .where(`member.${this.user.uid}`, '==', true)
+        .get()
+        .then(({ empty, docs }) => {
+          if (!empty) {
+            docs.forEach(doc => {
+              const payload = doc.data();
+              if (payload.owner === this.user.uid) {
+                this.userList.set(doc.id, payload);
+              } else {
+                this.sharedList.set(doc.id, payload);
+              }
+            });
+          } else {
+            this.addDefaultList();
+          }
+          return resolve()
+        })
+        .catch(err => reject(err));
+    });
   }
 
   addDefaultList() {

@@ -37,3 +37,6 @@ a:visited, a{
       transition: transform 0.4s;
       z-index: 0
 }
+h3{
+  text-align: left;
+}

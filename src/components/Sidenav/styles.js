@@ -1,7 +1,10 @@
 import { css } from "glamor";
 
 export default {
-  list: css({
+  list: (isVisible) => css({
+    transition: 'opacity 0.3s, transform 0.3s',
+    opacity: isVisible ? 1 : 0,
+    overflow: 'hidden',
     listStyle: 'none',
     padding: 0,
     '& li': {
