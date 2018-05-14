@@ -12,6 +12,7 @@ class StoreFetcher extends Component {
   };
 
   async componentDidMount() {
+    console.log('StoreFetcher Mount')
     try {
       await this.props.fetch();
       this.setState({ status: STATE.DONE });
@@ -20,6 +21,11 @@ class StoreFetcher extends Component {
       this.setState({ status: STATE.ERROR });
     }
   }
+
+  componentDidUpdate(){
+    console.log('Store fetcher Updare')
+  }
+  
 
   render() {
     switch (this.state.status) {

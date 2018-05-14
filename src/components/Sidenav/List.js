@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import styles from './styles';
@@ -12,8 +12,7 @@ class List extends Component {
 
   ref = null;
 
-  componentDidMount(){
-    console.log('did mount')
+  componentDidMount() {
     // if (this.ref && this.state.isVisible) {
     //   this.setState({ height: this.ref.clientHeight });
     //   console.log('did mount')
@@ -21,9 +20,8 @@ class List extends Component {
   }
 
 
-  componentDidUpdate(){
-    console.log('did update')
-    console.log(this.ref.clientHeight)
+  componentDidUpdate() {
+
   }
 
   toggle = () => {
@@ -39,10 +37,10 @@ class List extends Component {
 
   render() {
     const { list, onListSelect, title } = this.props;
-    let st ={};
-   if (this.state.height) {
-   //x  st = { height: this.state.isVisible ? this.state.height+'px' : 0 }
-   }
+    let st = {};
+    if (this.state.height) {
+      //x  st = { height: this.state.isVisible ? this.state.height+'px' : 0 }
+    }
     return (
       <Fragment>
         <h3 onClick={this.toggle}>{title}</h3>
@@ -61,4 +59,4 @@ class List extends Component {
   }
 }
 
-export default observer(List);
+export default withRouter(observer(List));

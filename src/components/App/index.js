@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import Store from 'src/models/Store';
 import { authService } from 'src/services/firebase';
@@ -27,14 +27,14 @@ class App extends Component {
 
   render() {
     const { user, initialLoad } = this.state;
-    
+
     return (
       <LoadingScreen isLoading={initialLoad}>
         {this.state.user ? (
           <Home store={new Store(user)} />
         ) : (
-          <Login authService={authService} />
-        )}
+            <Login authService={authService} />
+          )}
       </LoadingScreen>
     );
   }
