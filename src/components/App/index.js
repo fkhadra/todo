@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 
 import Store from 'src/models/Store';
 import { authService } from 'src/services/firebase';
+import TodoList from "src/components/TodoList";
 import Login from './Login';
-import Home from './Home';
 import LoadingScreen from './LoadingScreen';
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 class App extends Component {
   state = {
@@ -31,10 +34,11 @@ class App extends Component {
     return (
       <LoadingScreen isLoading={initialLoad}>
         {this.state.user ? (
-          <Home store={new Store(user)} />
+          <TodoList store={new Store(user)} />
         ) : (
             <Login authService={authService} />
           )}
+          <ToastContainer />
       </LoadingScreen>
     );
   }

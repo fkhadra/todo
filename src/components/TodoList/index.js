@@ -1,23 +1,20 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { TransitionGroup, Transition } from 'react-transition-group';
-import Modal from './Modal';
+import { toast } from "react-toastify";
 
 import styles from './styles';
 import Todo from './Todo';
 import TodoInput from './TodoInput';
-import TodoTitle from './TodoTitle';
 
 import listIcon from 'src/assets/list.svg';
 import scheduleIcon from 'src/assets/schedule.svg';
 import checkIcon from 'src/assets/check.svg';
 
-import ShareForm from './ShareForm';
-
 class TodoList extends Component {
   state = {
     filter: 'ALL',
-    displayShareForm: false
+    isLoading: true
   };
 
   applyFilter = {
@@ -28,22 +25,14 @@ class TodoList extends Component {
 
   positionRatio = 0;
 
-  componentDidMount() {
-    this.loadTodos(this.props.listId);
+  async componentDidMount() {
+    try {
+      await this.props.store.fetchTodos();
+      this.setState({ isLoading: false });
+    } catch (err) {
+      toast.error(`Oops something wrong, ${err}`);
+    }
   }
-
-  componentWillReceiveProps({ listId }) {
-    this.loadTodos(listId);
-  }
-
-  loadTodos(listId) {
-    this.props.store.fetchTodoList(listId);
-  }
-
-  toggleShareForm = () =>
-    this.setState({
-      displayShareForm: !this.state.displayShareForm
-    });
 
   filter = e => {
     const { width } = this.filterRef.getBoundingClientRect();
@@ -83,9 +72,12 @@ class TodoList extends Component {
   render() {
     const { store } = this.props;
 
+    if (this.state.isLoading) {
+      return <div>Loading...</div>;
+    }
+
     return (
       <section>
-        <TodoTitle store={store} toggleShareForm={this.toggleShareForm} />
         <TodoInput addTodo={store.addTodo} />
         <section {...styles.status}>
           <header>
@@ -114,14 +106,6 @@ class TodoList extends Component {
             {this.renderTodos()}
           </TransitionGroup>
         </div>
-
-        <Modal
-          visible={this.state.displayShareForm}
-          title="Share with friends"
-          close={this.toggleShareForm}
-        >
-          <ShareForm store={store}/>
-        </Modal>
       </section>
     );
   }

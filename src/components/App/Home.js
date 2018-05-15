@@ -1,10 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
-
 import { observer } from 'mobx-react';
 
 import TodoList from 'src/components/TodoList';
-import Sidenav from 'src/components/Sidenav';
 
 //import MenuTrigger from './MenuTrigger';
 import styles from './styles';
@@ -29,9 +26,6 @@ class Home extends Component {
             user={store.user}
             toggleSidebar={this.toggleSidebar}
           />
-          <aside {...styles.sidebar(isOpen)}>
-            <Sidenav store={store} toggleSidebar={this.toggleSidebar} />
-          </aside>
           <section {...styles.main}>
             <Route
               exact
