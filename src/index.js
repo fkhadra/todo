@@ -4,11 +4,8 @@ import 'normalize.css';
 import App from 'src/components/App';
 import registerServiceWorker from './registerServiceWorker';
 
-import fontawesome from '@fortawesome/fontawesome'
-import solid from '@fortawesome/fontawesome-free-solid'
+import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
-
-fontawesome.library.add(solid);
 
 ReactDOM.render(
     <App />,

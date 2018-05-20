@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
+import { ToastContainer } from "react-toastify";
+
 
 import Store from 'src/models/Store';
 import { authService } from 'src/services/firebase';
 import TodoList from "src/components/TodoList";
 import Login from './Login';
 import LoadingScreen from './LoadingScreen';
-import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 
 class App extends Component {

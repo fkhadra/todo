@@ -27,8 +27,6 @@ const styles = {
       transition: 'transform 0.4s',
       ':focus': {
         outline: 'none',
-        // boxShadow: '0 0 10px #9b4dca',
-        // border: '1px solid #9b4dca'
         transform: ''
       },
       '::placeholder': {
@@ -60,11 +58,12 @@ export default class TodoInput extends Component {
 
   handleSubmit = e => {
     const value = this.state.inputValue.trim()
-    
     if (e.which === keys.ENTER && value.length) {
       this.props.addTodo({ value });
+      e.target.blur();
       this.clearInput();
     } else if (e.which === keys.ESCAPE) {
+      e.target.blur()
       this.clearInput();
     }
   };

@@ -1,12 +1,10 @@
 import { decorate, observable } from 'mobx';
 import User from './User';
 import { dbService, authService } from 'src/services/firebase';
-import { toast } from 'react-toastify';
 
 class Store {
   user = null;
   todoList = new Map();
-  isFetching = true;
 
   constructor(user) {
     this.user = new User(user);
@@ -17,7 +15,7 @@ class Store {
         .collection('todoList')
         .doc(this.user.uid)
         .collection('todos'),
-      genId() {
+      genId: () => {
         return dbService
           .collection('todoLists')
           .doc(this.user.uid)
@@ -34,27 +32,16 @@ class Store {
       .catch(err => console.log(err));
   }
 
-  fetchTodos = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const { empty, docs } = await this._db.todos.get();
+  fetchTodos = async () => {
+    const { empty, docs } = await this._db.todos.get();
 
-        if (!empty) {
-          docs.forEach(doc => {
-            const payload = doc.data();
-            this.todoList.set(doc.id, payload);
-          });
-        }
-        resolve();
-      } catch (err) {
-        reject(err);
-      }
-    });
+    if (!empty) {
+      docs.forEach(doc => {
+        const payload = doc.data();
+        this.todoList.set(doc.id, payload);
+      });
+    }
   };
-
-  _dispatchError(err) {
-    toast.error(`Oops something wrong, ${err}`);
-  }
 
   addTodo = async payload => {
     const todoId = this._db.genId();
@@ -65,22 +52,14 @@ class Store {
       updatedAt: null,
       ...payload
     };
+    this.todoList.set(todo.id, todo);
 
-    try {
-      await this._db.doc(todo.id).set(todo);
-      this.todoList.set(todo.id, todo);
-    } catch (err) {
-      this._dispatchError(err);
-    }
+    await this._db.todos.doc(todo.id).set(todo);
   };
 
   removeTodo = async todoId => {
-    try {
-      await this._db.todos.doc(todoId).delete();
-      this.todoList.delete(todoId);
-    } catch (err) {
-      reject(err);
-    }
+    this.todoList.delete(todoId);
+    await this._db.todos.doc(todoId).delete();
   };
 
   toggleDone = id => {
@@ -92,12 +71,8 @@ class Store {
 
   updateTodo = async (id, payload) => {
     const todo = this.todoList.get(id);
-    try {
-      await this._db.todos.doc(id).update(payload);
-      this.todoList.set(id, { ...todo, ...payload, updatedAt: Date.now() });
-    } catch (err) {
-      reject(err);
-    }
+    this.todoList.set(id, { ...todo, ...payload, updatedAt: Date.now() });
+    await this._db.todos.doc(id).update(payload);
   };
 }
 

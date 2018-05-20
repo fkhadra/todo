@@ -1,6 +1,5 @@
 import { css, keyframes } from 'glamor';
 
-
 const animations = {
   slideInLeft: keyframes({
     from: {
@@ -33,8 +32,8 @@ const styles = {
     listStyle: 'none',
     overflowY: 'scroll',
     padding: 0,
-    '& li:not(:first-child)': {
-      borderTop: 'solid 1px #424545'
+    '& li': {
+      padding: '5px 0'
     }
   }),
   enter: css({
@@ -47,24 +46,21 @@ const styles = {
       animationFillMode: 'both',
       animationDuration: '0.75s',
       animationName: animations.zoomOut,
-      transition: 'max-height 0.75s, opacity 0.75s',
+      transition: 'max-height 0.75s, opacity 0.75s, padding 0.75s',
       maxHeight: height,
       overflow: 'hidden'
     }),
   onExit: node => {
     node.classList.add(styles.exit(`${node.offsetHeight}px`));
     requestAnimationFrame(() => {
-      node.style.maxHeight = '0';
-      node.style.opacity = '0';
+      node.style.maxHeight = 0;
+      node.style.opacity = 0;
+      node.style.padding = 0;
     });
   },
   status: css({
     '& header': {
       textAlign: 'left'
-    },
-    '& > div': {
-      background: 'grey',
-      opacity: 0.5
     }
   }),
   progressBar: css({
@@ -81,18 +77,19 @@ const styles = {
     '& figure': {
       margin: 0,
       padding: '0.8rem',
-      transition: 'transform 0.4s',
+      transition: 'transform 0.4s'
     }
   }),
-  activeFilter: position => css({
-    position: 'absolute',
-    height: '3px',
-    width: '50px',
-    bottom: 0,
-    background: '#ffffff',
-    transform: `translateX(${position}px)`,
-    transition: 'transform 0.4s'
-  })
+  activeFilter: position =>
+    css({
+      position: 'absolute',
+      height: '3px',
+      width: '50px',
+      bottom: 0,
+      background: '#ffffff',
+      transform: `translateX(${position}px)`,
+      transition: 'transform 0.4s'
+    })
 };
 
 export default styles;

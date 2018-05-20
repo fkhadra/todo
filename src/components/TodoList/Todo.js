@@ -13,8 +13,10 @@ const styles = {
     justifyItems: 'center',
     justifyContent: 'space-between',
     alignItems: 'center',
+    background: 'rgba(0,0,0,0.2)',
+    borderRadius: '5px',
     '& img': {
-      opacity: 0,
+      opacity: 0.8,
       pointerEvents: 'none'
     },
     ':hover': {
@@ -35,7 +37,6 @@ const styles = {
       textAlign: 'left'
     },
     '& input:focus': {
-      // background: '#6c6e6f',
       outline: 'none',
       caretColor: '#0cc10c'
     }
