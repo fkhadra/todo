@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import { observer } from "mobx-react";
 import { css } from 'glamor';
 
 import Checkmark from './Checkmark';
-import Input from 'src/components/Input';
+import Input from './Input';
 import deleteIcon from 'src/assets/delete.svg';
 
-import { observer } from "mobx-react";
 
 const styles = {
   container: css({
