@@ -38,7 +38,7 @@ export default class Menu extends Component {
           {...css({
             zIndex: 1,
             position: 'absolute',
-            display: 'flex',
+            display: this.state.isOpen ? 'flex' : 'none',
             flexDirection: 'column',
             alignItems: 'self-start',
             width: '175px',
@@ -46,9 +46,6 @@ export default class Menu extends Component {
             right: '-10px',
             height: '200px',
             background: '#fff',
-            transform: this.state.isOpen ? 'scale(1)' : 'scale(0)',
-            transformOrigin: '95% top',
-            transition: 'transform 0.4s',
             color: "#000",
             boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
             '&:before': {
