@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { css } from 'glamor';
 
 import Checkmark from './Checkmark';
-import Input from './Input';
+import {Input} from 'src/components/Misc';
 import deleteIcon from 'src/assets/delete.svg';
 
 

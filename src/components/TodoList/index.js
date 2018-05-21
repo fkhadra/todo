@@ -5,12 +5,14 @@ import { toast } from 'react-toastify';
 
 import styles from './styles';
 import Todo from './Todo';
-import TodoInput from './TodoInput';
-import Footer from "./Footer";
+import AddTodo from './AddTodo';
+import Footer from './Footer';
 
+import { Spinner } from 'src/components/Misc';
 import listIcon from 'src/assets/list.svg';
 import scheduleIcon from 'src/assets/schedule.svg';
 import checkIcon from 'src/assets/check.svg';
+import signOutIcon from 'src/assets/sign-out.svg';
 
 class TodoList extends Component {
   state = {
@@ -51,18 +53,17 @@ class TodoList extends Component {
       todoList,
       addTodo
     } = this.props.store;
-    const { filter } = this.state;
 
-    if (this.state.isLoading) {
-      return <div>Loading...</div>;
-    }
+    const { filter, isLoading } = this.state;
 
     return (
-      <section style={{ height: '100vh' }}>
+      <section {...styles.container}>
+      <header>
         <h1>To-Do</h1>
-        <TodoInput addTodo={addTodo} />
-        <header {...styles.status}>
-          <div {...styles.filter} ref={ref => (this.filterRef = ref)}>
+        <img src={signOutIcon} alt="sign-out"/>
+      </header>
+        <AddTodo addTodo={addTodo} />
+          <nav {...styles.filter} ref={ref => (this.filterRef = ref)}>
             <figure onClick={this.filter} data-filter="ALL" data-idx="0">
               <img src={listIcon} alt="list all" />
             </figure>
@@ -73,34 +74,37 @@ class TodoList extends Component {
               <img src={checkIcon} alt="done" />
             </figure>
             <div {...styles.activeFilter(this.positionRatio)} />
-          </div>
-        </header>
-        <div>
-          <TransitionGroup {...styles.list} component="ul">
-            {Array.from(todoList.values())
-              .filter(this.applyFilter[filter])
-              .reverse()
-              .map(todo => (
-                <Transition
-                  key={todo.id}
-                  timeout={750}
-                  onEnter={node => node.classList.add(styles.enter)}
-                  onEntered={node => node.classList.remove(styles.enter)}
-                  onExit={styles.onExit}
-                >
-                  <li>
-                    <Todo
-                      todo={todo}
-                      toggleDone={toggleDone}
-                      updateTodo={updateTodo}
-                      removeTodo={removeTodo}
-                    />
-                  </li>
-                </Transition>
-              ))}
-          </TransitionGroup>
-          <Footer />
-        </div>
+          </nav>
+        <main>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+              <TransitionGroup {...styles.list} component="ul">
+                {Array.from(todoList.values())
+                  .filter(this.applyFilter[filter])
+                  .reverse()
+                  .map(todo => (
+                    <Transition
+                      key={todo.id}
+                      timeout={750}
+                      onEnter={node => node.classList.add(styles.enter)}
+                      onEntered={node => node.classList.remove(styles.enter)}
+                      onExit={styles.onExit}
+                    >
+                      <li>
+                        <Todo
+                          todo={todo}
+                          toggleDone={toggleDone}
+                          updateTodo={updateTodo}
+                          removeTodo={removeTodo}
+                        />
+                      </li>
+                    </Transition>
+                  ))}
+              </TransitionGroup>
+            )}
+        </main>
+        <Footer />
       </section>
     );
   }

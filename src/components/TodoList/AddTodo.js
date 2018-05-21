@@ -44,7 +44,7 @@ const styles = {
   })
 };
 
-export default class TodoInput extends Component {
+export default class AddTodo extends Component {
   state = {
     inputValue: ''
   };

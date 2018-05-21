@@ -28,6 +28,14 @@ const animations = {
 };
 
 const styles = {
+  container: css({
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    '& main': {
+      flex: 1
+    }
+  }),
   list: css({
     listStyle: 'none',
     overflowY: 'scroll',
@@ -58,18 +66,6 @@ const styles = {
       node.style.padding = 0;
     });
   },
-  status: css({
-    '& header': {
-      textAlign: 'left'
-    }
-  }),
-  progressBar: css({
-    height: '4px',
-    background:
-      'linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55)',
-    width: 0,
-    transition: 'width 0.5s'
-  }),
   filter: css({
     display: 'flex',
     position: 'relative',
