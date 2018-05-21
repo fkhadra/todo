@@ -8,16 +8,16 @@ import Todo from './Todo';
 import AddTodo from './AddTodo';
 import Footer from './Footer';
 
-import { Spinner } from 'src/components/Misc';
+import { Spinner, Menu } from 'src/components/Misc';
 import listIcon from 'src/assets/list.svg';
 import scheduleIcon from 'src/assets/schedule.svg';
 import checkIcon from 'src/assets/check.svg';
-import signOutIcon from 'src/assets/sign-out.svg';
 
 class TodoList extends Component {
   state = {
     filter: 'ALL',
-    isLoading: true
+    isLoading: true,
+    showModal: false
   };
 
   applyFilter = {
@@ -51,30 +51,33 @@ class TodoList extends Component {
       updateTodo,
       removeTodo,
       todoList,
-      addTodo
+      addTodo,
+      signOut
     } = this.props.store;
 
     const { filter, isLoading } = this.state;
 
     return (
       <section {...styles.container}>
-      <header>
-        <h1>To-Do</h1>
-        <img src={signOutIcon} alt="sign-out"/>
-      </header>
+        <header>
+          <h1>To-Do
+            <Menu
+            />
+            </h1>
+        </header>
         <AddTodo addTodo={addTodo} />
-          <nav {...styles.filter} ref={ref => (this.filterRef = ref)}>
-            <figure onClick={this.filter} data-filter="ALL" data-idx="0">
-              <img src={listIcon} alt="list all" />
-            </figure>
-            <figure onClick={this.filter} data-filter="ACTIVE" data-idx="1">
-              <img src={scheduleIcon} alt="todo" />
-            </figure>
-            <figure onClick={this.filter} data-filter="DONE" data-idx="2">
-              <img src={checkIcon} alt="done" />
-            </figure>
-            <div {...styles.activeFilter(this.positionRatio)} />
-          </nav>
+        <nav {...styles.filter} ref={ref => (this.filterRef = ref)}>
+          <figure onClick={this.filter} data-filter="ALL" data-idx="0">
+            <img src={listIcon} alt="list all" />
+          </figure>
+          <figure onClick={this.filter} data-filter="ACTIVE" data-idx="1">
+            <img src={scheduleIcon} alt="todo" />
+          </figure>
+          <figure onClick={this.filter} data-filter="DONE" data-idx="2">
+            <img src={checkIcon} alt="done" />
+          </figure>
+          <div {...styles.activeFilter(this.positionRatio)} />
+        </nav>
         <main>
           {isLoading ? (
             <Spinner />

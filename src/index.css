@@ -21,10 +21,6 @@ a:visited, a{
   color: #ffffff;
 }
 
-.firebaseui-container {
-  background-color: #2c2f34 !important;
-}
-
 .menu{
     position: absolute;
       width: 150px;

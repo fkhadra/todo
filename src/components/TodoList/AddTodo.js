@@ -71,7 +71,7 @@ export default class AddTodo extends Component {
   render() {
     const { inputValue } = this.state;
     return (
-      <div {...styles.group}>
+      <form {...styles.group} action="#">
         <input
           type="text"
           value={inputValue}
@@ -89,7 +89,7 @@ export default class AddTodo extends Component {
         ) : (
           <img {...styles.icon} src={editIcon} alt="input" />
         )}
-      </div>
+      </form>
     );
   }
 }

@@ -40,15 +40,17 @@ export default class Input extends Component {
     const { placeholder } = this.props;
 
     return (
-      <input
-        type="text"
-        value={inputValue}
-        placeholder={placeholder}
-        onChange={this.onInputChange}
-        onKeyPress={this.handleSubmit}
-        onBlur={this.handleSubmit}
-        autoFocus
-      />
+      <form action="#" style={{ flex: 1 }}>
+        <input
+          type="text"
+          value={inputValue}
+          placeholder={placeholder}
+          onChange={this.onInputChange}
+          onKeyPress={this.handleSubmit}
+          onBlur={this.handleSubmit}
+          autoFocus
+        />
+      </form>
     );
   }
 }

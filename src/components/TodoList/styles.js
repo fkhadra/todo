@@ -32,6 +32,14 @@ const styles = {
     height: '100vh',
     display: 'flex',
     flexDirection: 'column',
+    maxWidth: '600px',
+    margin: 'auto',
+    // '& header': {
+    //   '& h1': {
+    //     flex: 1
+    //   },
+    //   display: 'flex',
+    // },
     '& main': {
       flex: 1
     }

@@ -29,8 +29,8 @@ const styles = {
 
 export default ({ isLoading, children }) => (
   <Fragment>
-    <div {...styles.left(isLoading)} />
-    <div {...styles.right(isLoading)} />
+    {/* <div {...styles.left(isLoading)} />
+    <div {...styles.right(isLoading)} /> */}
     {/* <div {...styles.spinner} /> */}
     {children}
   </Fragment>
