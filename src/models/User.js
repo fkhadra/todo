@@ -14,7 +14,7 @@ class User {
     this.email = email;
     this.emailVerified = emailVerified;
     this.isAnonymous = isAnonymous;
-    this.photoUrl = photoURL;
+    this.photoURL = photoURL;
   }
 }
 

@@ -34,14 +34,32 @@ const styles = {
     flexDirection: 'column',
     maxWidth: '600px',
     margin: 'auto',
-    // '& header': {
-    //   '& h1': {
-    //     flex: 1
-    //   },
-    //   display: 'flex',
-    // },
+    '& header': {
+      display: 'flex',
+      justifyContent: 'center'
+    },
     '& main': {
       flex: 1
+    }
+  }),
+  menu: css({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    height: '100%',
+    width: '100%',
+    padding: '16px 0',
+    '& img': {
+      width: '70px',
+      borderRadius: '50%',
+      verticalAlign: 'middle'
+    },
+    '& span': {
+      margin: '0 12px'
+    },
+    '& a': {
+      padding: '8px',
+      cursor: 'pointer'
     }
   }),
   list: css({

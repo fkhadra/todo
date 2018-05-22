@@ -52,7 +52,8 @@ class TodoList extends Component {
       removeTodo,
       todoList,
       addTodo,
-      signOut
+      signOut,
+      user
     } = this.props.store;
 
     const { filter, isLoading } = this.state;
@@ -60,10 +61,16 @@ class TodoList extends Component {
     return (
       <section {...styles.container}>
         <header>
-          <h1>To-Do
-            <Menu
-            />
-            </h1>
+          <h1>To-Do</h1>
+          <Menu>
+            <div {...styles.menu}>
+              <div>
+                <img src={user.photoURL} alt="profile" />
+                <span>{user.displayName || user.email}</span>
+              </div>
+              <div><a onClick={signOut}>Sign Out</a></div>
+            </div>
+          </Menu>
         </header>
         <AddTodo addTodo={addTodo} />
         <nav {...styles.filter} ref={ref => (this.filterRef = ref)}>
