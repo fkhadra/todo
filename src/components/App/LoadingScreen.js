@@ -50,7 +50,7 @@ export default class extends React.Component {
         {/* {isLoading ? <Spinner /> : children} */}
         <div {...styles.left(isLoading)}  data-trans="left" onTransitionEnd={this.handleTransitonEnd}/>
         <div {...styles.right(isLoading)} data-trans="right" />
-        <div
+        {/* <div
           {...css({
             position: 'fixed',
             left: '50%',
@@ -66,11 +66,12 @@ export default class extends React.Component {
             src={logo}
             {...css({
               width: '200px',
-              animation: `${a} 6s linear infinite`
+              animation: `${a} 6s linear infinite`,
+              pointerEvents: 'none'
             })}
             alt=""
           />
-        </div>
+        </div> */}
         {children}
       </Fragment>
     );

@@ -71,7 +71,7 @@ export default class AddTodo extends Component {
   render() {
     const { inputValue } = this.state;
     return (
-      <form {...styles.group} action="#">
+      <form {...styles.group} action="#" onSubmit={e=> e.preventDefault()}>
         <input
           type="text"
           value={inputValue}

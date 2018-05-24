@@ -40,7 +40,7 @@ export default class Input extends Component {
     const { placeholder } = this.props;
 
     return (
-      <form action="#" style={{ flex: 1 }}>
+      <form action="#" style={{ flex: 1 }} onSubmit={e=> e.preventDefault()}>
         <input
           type="text"
           value={inputValue}
