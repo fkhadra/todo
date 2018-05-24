@@ -87,9 +87,11 @@ const styles = {
   onExit: node => {
     node.classList.add(styles.exit(`${node.offsetHeight}px`));
     requestAnimationFrame(() => {
-      node.style.maxHeight = 0;
-      node.style.opacity = 0;
-      node.style.padding = 0;
+      setTimeout(() => {
+        node.style.maxHeight = 0;
+        node.style.opacity = 0;
+        node.style.padding = 0;
+      }, 0);
     });
   },
   filter: css({
