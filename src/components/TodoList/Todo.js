@@ -72,7 +72,7 @@ const styles = {
     editing: false
   };
 
-  touchStart = 0;
+  touchId = 0;
 
   toggle = () => this.props.toggleDone(this.props.todo.id);
 
@@ -89,16 +89,16 @@ const styles = {
 
   handleTouchStart = (e) => {
     if(e.touches.length === 1) {
-      this.setState({ editing: false});
-      this.touchStart = Date.now();
+      this.touchId = setTimeout(() => {
+        this.toggleEdit();
+      }, 400);
+      //this.setState({ editing: false});
+      //this.touchStart = Date.now();
     }
   }
 
   handleTouchEnd = () => {
-    const delta = Date.now() - this.touchStart;
-    if (delta >= 400 && delta <= 800) {
-      this.toggleEdit();
-    }
+   clearTimeout(this.touchId);
   };
 
   render() {
