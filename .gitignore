@@ -21,3 +21,4 @@ yarn-debug.log*
 yarn-error.log*
 
 server/cert.json
+src/services/firebase.config.js

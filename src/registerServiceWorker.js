@@ -18,7 +18,7 @@ const isLocalhost = Boolean(
     )
 );
 
-export default function register() {
+export default function register(toast) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
@@ -31,19 +31,32 @@ export default function register() {
 
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+      let isAppOnline = navigator.onLine;
+
+      window.addEventListener('online', () => {
+        if(!isAppOnline){
+          toast('🦄 The connectivity is back, sync in progress...');
+          isAppOnline = true;
+        }
+      });
+
+      window.addEventListener('offline', () => {
+        toast.warn('The app is running offline, any changes mades during this time will be synced as soon as the connectivity is back');
+        isAppOnline = false;
+      });
 
       if (isLocalhost) {
         // This is running on localhost. Lets check if a service worker still exists or not.
-        checkValidServiceWorker(swUrl);
+        checkValidServiceWorker(swUrl, toast);
       } else {
         // Is not local host. Just register service worker
-        registerValidSW(swUrl);
+        registerValidSW(swUrl, toast);
       }
     });
   }
 }
 
-function registerValidSW(swUrl) {
+function registerValidSW(swUrl, toast) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
@@ -56,23 +69,23 @@ function registerValidSW(swUrl) {
               // the fresh content will have been added to the cache.
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
-              console.log('New content is available; please refresh.');
+              toast.info('🔄 New content is available; please refresh.')
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
-              console.log('Content is cached for offline use.');
+              toast('🚀 Content is cached for offline use.')
             }
           }
         };
       };
     })
     .catch(error => {
-      console.error('Error during service worker registration:', error);
+      toast.error('Error during service worker registration: ' + error,);
     });
 }
 
-function checkValidServiceWorker(swUrl) {
+function checkValidServiceWorker(swUrl, toast) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl)
     .then(response => {
@@ -93,8 +106,8 @@ function checkValidServiceWorker(swUrl) {
       }
     })
     .catch(() => {
-      console.log(
-        'No internet connection found. App is running in offline mode.'
+      toast(
+        '💩 No internet connection found. App is running in offline mode.'
       );
     });
 }
