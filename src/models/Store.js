@@ -25,11 +25,8 @@ class Store {
     };
   }
 
-  signOut() {
-    authService
-      .signOut()
-      .then(() => console.log('signout'))
-      .catch(err => console.log(err));
+  async signOut() {
+    await authService.signOut();
   }
 
   fetchTodos = async () => {

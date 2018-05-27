@@ -36,7 +36,7 @@ export default class Menu extends Component {
           display: 'inline-block'
         })}
       >
-        <img src={ellispsisIcon} alt="Menu" onClick={this.toggle} />
+        <img {...css({ cursor: 'pointer' })} src={ellispsisIcon} alt="Menu" onClick={this.toggle} />
         <div
           {...css({
             zIndex: 1,
