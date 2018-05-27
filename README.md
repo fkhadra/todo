@@ -1,6 +1,6 @@
 # The fanciest To-Do app ever made or not ...
 
-<iframe src='https://gfycat.com/ifr/SmartOpenAmericantoad' frameborder='0' scrolling='no' width='362' height='642' allowfullscreen></iframe>
+<img src="https://thumbs.gfycat.com/SmartOpenAmericantoad-size_restricted.gif" />
 
 ## Demo
 
