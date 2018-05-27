@@ -1,6 +1,8 @@
 # The fanciest To-Do app ever made or not ...
 
+<p align="center">
 <img src="https://thumbs.gfycat.com/SmartOpenAmericantoad-size_restricted.gif" />
+ </p>
 
 ## Demo
 
