@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-interface InputProps {
+export interface InputProps {
   initialValue: string;
   onSubmit(value: string, addTodo: boolean): void;
   placeholder: string;
