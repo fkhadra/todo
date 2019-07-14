@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default () => (
+export const Footer: React.FC = () => (
   <footer>
     <h5>
       <a
