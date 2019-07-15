@@ -1,7 +1,7 @@
 import React, { useState, useEffect, SyntheticEvent } from 'react';
 import styled from 'styled-components';
 
-import { ellipsis } from '../../assets';
+import { ellipsisIcon } from '../../assets';
 
 const Container = styled.div`
   margin: auto 10px;
@@ -63,7 +63,7 @@ const Menu: React.FC = ({ children }) => {
 
   return (
     <Container>
-      <img src={ellipsis} alt="Menu" onClick={toggle} />
+      <img src={ellipsisIcon} alt="Menu" onClick={toggle} />
       <Content isOpen={isOpen} onClick={stopPropagation}>
         {children}
       </Content>
