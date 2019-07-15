@@ -4,9 +4,9 @@ import { TransitionGroup, Transition } from 'react-transition-group';
 import { toast } from 'react-toastify';
 
 import styles from './styles';
-import Todo from './Todo';
-import AddTodo from './AddTodo';
-import Footer from './Footer';
+import Todo from '../components/TodoList/TodoItem';
+import AddTodo from '../components/TodoList/AddTodo';
+import Footer from '../components/TodoList/Footer';
 
 import { Spinner, Menu } from 'src/components/Misc';
 import listIcon from 'src/assets/list.svg';

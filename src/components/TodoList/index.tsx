@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { TransitionGroup, Transition } from 'react-transition-group';
 
 import { AddTodo } from './AddTodo';
-import { TodoInput } from './TodoInput';
+import { TodoItem } from './TodoItem';
 import { Footer } from './Footer';
-import { Todo, useTodos } from '../../hooks';
+import { useTodos, Todo } from '../../contexts';
 
 //import { Spinner } from "../Misc";
 import { FilterTab } from './FilterTab';
@@ -34,7 +34,7 @@ const applyFilter = {
 
 const StyledTransition = styled(TransitionGroup)`
   list-style: none;
-  overflow-y: scroll;
+  overflow: hidden;
   padding: 0;
   & li {
     padding: 5px 0;
@@ -43,7 +43,7 @@ const StyledTransition = styled(TransitionGroup)`
 export type Filter = keyof typeof applyFilter;
 
 export const TodoList: React.FC = () => {
-  const [filter, setFilter] = useState<keyof typeof applyFilter>('ALL');
+  const [filter, setFilter] = useState<Filter>('ALL');
   const { todos } = useTodos();
 
   function onFilterChange(filter: Filter) {
@@ -68,7 +68,7 @@ export const TodoList: React.FC = () => {
               onExit={transition.onExit}
             >
               <li>
-                <TodoInput todo={todo} />
+                <TodoItem todo={todo} />
               </li>
             </Transition>
           ))}

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { editIcon, clearIcon } from '../../assets';
-import { useTodos } from '../../hooks';
-import {keys} from '../../utils'
+import { useTodos } from '../../contexts';
+import { useInput } from '../../hooks';
+import { keys } from '../../utils';
 
 const Form = styled.form`
   position: relative;
@@ -39,23 +40,20 @@ const Icon = styled.img<{ clear: boolean }>`
 `;
 
 export const AddTodo: React.FC = () => {
-  const [value, setValue] = useState('');
+  const { inputValue, onInputChange, clearInput } = useInput('');
   const { add } = useTodos();
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setValue(e.target.value.trimStart());
-  const clear = () => setValue('');
 
-  const onSubmit = (e: React.KeyboardEvent | React.FocusEvent) => {
+  function onSubmit(e: React.KeyboardEvent | React.FocusEvent){
     if (
-      value.length &&
+      inputValue.length &&
       ((e as React.KeyboardEvent).which === keys.ENTER || e.type === 'blur')
     ) {
-      add(value);
+      add(inputValue);
       (e.target as HTMLElement).blur();
-      clear();
+      clearInput();
     } else if ((e as React.KeyboardEvent).which === keys.ESCAPE) {
       (e.target as HTMLElement).blur();
-      clear();
+      clearInput();
     }
   };
 
@@ -63,13 +61,13 @@ export const AddTodo: React.FC = () => {
     <Form action="#" onSubmit={e => e.preventDefault()}>
       <input
         type="text"
-        value={value}
+        value={inputValue}
         placeholder="What need to be done ?"
-        onChange={onChange}
+        onChange={onInputChange}
         onKeyPress={onSubmit}
       />
-      {value.length ? (
-        <Icon clear src={clearIcon} alt="input" onClick={clear} />
+      {inputValue.length ? (
+        <Icon clear src={clearIcon} alt="input" onClick={clearInput} />
       ) : (
         <Icon clear={false} src={editIcon} alt="input" />
       )}

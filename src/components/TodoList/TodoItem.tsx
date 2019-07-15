@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 import { Checkmark } from './Checkmark';
 import { deleteIcon } from '../../assets';
-import { Todo, useTodos } from '../../hooks';
-import { Input } from '../Misc';
+import { useInput, useToggle } from '../../hooks';
+import { useTodos, Todo } from '../../contexts';
+import { keys } from '../../utils';
 
 const Container = styled.article`
   display: flex;
@@ -40,6 +41,7 @@ const Container = styled.article`
     caret-color: #0cc10c;
   }
 `;
+
 const Content = styled.div<{ done: boolean }>`
   position: relative;
   opacity: ${props => (props.done ? 0.5 : 1)};
@@ -60,52 +62,73 @@ const Content = styled.div<{ done: boolean }>`
   }
 `;
 
+const DeleteIcon = styled.img`
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 export interface TodoProps {
   todo: Todo;
 }
 
-export const TodoInput: React.FC<TodoProps> = ({ todo }) => {
-  const [isActive, toggleState] = useState(false);
+export const TodoItem: React.FC<TodoProps> = ({ todo }) => {
+  const { isToggled, toggle } = useToggle(false);
+  const { inputValue, onInputChange } = useInput(todo.value);
   const timeoutId = useRef<number>();
   const todos = useTodos();
 
-  const toggle = () => todos.toggle(todo.id);
-  const remove = () => todos.remove(todo.id);
-  const toggleEdit = () => toggleState(!isActive);
-  const handleSubmit = (value: string, addTodo: boolean) => {
-    if (addTodo) todos.update(todo.id, { value });
-    toggleEdit();
+  const toggleTodo = () => todos.toggle(todo.id);
+  const removeTodo = () => todos.remove(todo.id);
+
+  const handleSubmit = (e: React.KeyboardEvent | React.FocusEvent) => {
+    if (
+      inputValue.length &&
+      ((e as React.KeyboardEvent).which === keys.ENTER || e.type === 'blur')
+    ) {
+      todos.update(todo.id, { value: inputValue });
+      toggle();
+    } else if ((e as React.KeyboardEvent).which === keys.ESCAPE) {
+      toggle();
+    }
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 1) {
-      timeoutId.current = setTimeout(() => toggleEdit(), 400);
+      timeoutId.current = setTimeout(() => toggle(), 400);
     }
   };
 
   const handleTouchEnd = () => clearTimeout(timeoutId.current);
 
-  const { done, value } = todo;
+  const { done } = todo;
 
   return (
     <Container>
-      <div onClick={toggle}>
+      <div onClick={toggleTodo}>
         <Checkmark checked={done} />
       </div>
-      {isActive ? (
-        <Input onSubmit={handleSubmit} initialValue={value} />
+      {isToggled ? (
+        <input
+          type="text"
+          value={inputValue}
+          onChange={onInputChange}
+          onKeyPress={handleSubmit}
+          onBlur={handleSubmit}
+          autoFocus
+        />
       ) : (
         <Content
           done={done}
-          onDoubleClick={toggleEdit}
+          onDoubleClick={toggle as any}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {value}
+          {todo.value}
         </Content>
       )}
       <div>
-        <img src={deleteIcon} alt="delete" onClick={remove} />
+        <DeleteIcon src={deleteIcon} alt="delete" onClick={removeTodo} />
       </div>
     </Container>
   );
