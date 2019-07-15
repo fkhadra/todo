@@ -3,11 +3,7 @@ import styled from 'styled-components';
 
 import { editIcon, clearIcon } from '../../assets';
 import { useTodos } from '../../hooks';
-
-const keys = {
-  ENTER: 13,
-  ESCAPE: 27
-};
+import {keys} from '../../utils'
 
 const Form = styled.form`
   position: relative;

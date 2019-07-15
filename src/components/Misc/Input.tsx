@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
+import {keys } from '../../utils';
 
 export interface InputProps {
   initialValue: string;
   onSubmit(value: string, addTodo: boolean): void;
   placeholder?: string;
 }
-
-const keys = {
-  ENTER: 13,
-  ESCAPE: 27
-};
 
 const Input: React.FC<InputProps> = ({
   initialValue,
