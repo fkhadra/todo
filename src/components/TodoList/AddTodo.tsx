@@ -43,7 +43,7 @@ const Icon = styled.img<{ clear: boolean }>`
 `;
 
 export const AddTodo: React.FC = () => {
-  const [value, setValue] = useState();
+  const [value, setValue] = useState('');
   const { add } = useTodos();
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.value.trimStart());
