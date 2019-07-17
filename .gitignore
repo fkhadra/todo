@@ -22,3 +22,4 @@ yarn-error.log*
 
 server/cert.json
 src/services/firebase.config.js
+src/services/firebase.config.ts

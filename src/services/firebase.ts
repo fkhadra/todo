@@ -1,7 +1,5 @@
-import * as firebase from 'firebase';
-// eslint-disable-next-line
-import * as firestore from 'firebase/firestore';
-import config from './firebase.config';
+import firebase, { firestore, auth } from 'firebase';
+import { config } from './firebase.config';
 
 const uiConfig = {
   signInFlow: 'popup',
@@ -23,8 +21,9 @@ if (!firebase.apps.length) {
   firebase.initializeApp(config);
 }
 
-const authService = firebase.auth();
-let dbService = firebase.firestore();
+const authService = auth();
+let dbService = firestore();
+
 dbService.settings({
   timestampsInSnapshots: true
 });
@@ -32,10 +31,8 @@ dbService.settings({
 dbService
   .enablePersistence()
   .then(() => {
-    dbService = firebase.firestore();
+    dbService = firestore();
   })
   .catch(err => console.log(err));
 
-authService.uiConfig = uiConfig;
-
-export { authService, dbService };
+export { authService, dbService, uiConfig };
