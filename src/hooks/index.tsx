@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { auth, User } from 'firebase';
 
-export function useInput(initialValue = ''){
+export function useInput(initialValue = '') {
   const [value, setValue] = useState(initialValue);
-  
-  function onInputChange(e: React.ChangeEvent<HTMLInputElement>){
+
+  function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setValue(e.target.value.trimStart());
   }
 
-  function clearInput(){
+  function clearInput() {
     setValue('');
   }
 
@@ -15,14 +16,14 @@ export function useInput(initialValue = ''){
     inputValue: value,
     onInputChange,
     clearInput
-  }
+  };
 }
 
 export function useToggle(initialState = false) {
   const [isToggled, setState] = useState(initialState);
 
-  function toggle(state?: boolean){
-    if(typeof state === 'boolean'){
+  function toggle(state?: boolean) {
+    if (typeof state === 'boolean') {
       setState(state);
       return;
     }
@@ -32,5 +33,18 @@ export function useToggle(initialState = false) {
   return {
     isToggled,
     toggle
-  }
+  };
+}
+
+export function useFirebaseAuth() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unregisterAuthObserver = auth().onAuthStateChanged(firebaseUser => {
+      setUser(firebaseUser);
+    });
+    return () => unregisterAuthObserver();
+  }, []);
+
+  return user;
 }

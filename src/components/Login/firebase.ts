@@ -1,5 +1,5 @@
-import firebase, { firestore, auth } from 'firebase';
-import { config } from './firebase.config';
+import firebase, { auth } from 'firebase';
+import { config } from '../../firebase.config';
 
 const uiConfig = {
   signInFlow: 'popup',
@@ -13,7 +13,7 @@ const uiConfig = {
   ],
   callbacks: {
     // Avoid redirects after sign-in.
-    signInSuccess: () => false
+    signInSuccessWithAuthResult: () => false
   }
 };
 
@@ -21,18 +21,20 @@ if (!firebase.apps.length) {
   firebase.initializeApp(config);
 }
 
-const authService = auth();
-let dbService = firestore();
+const firebaseAuth = auth();
 
-dbService.settings({
-  timestampsInSnapshots: true
-});
+export { firebaseAuth, uiConfig };
+// let dbService = firestore();
 
-dbService
-  .enablePersistence()
-  .then(() => {
-    dbService = firestore();
-  })
-  .catch(err => console.log(err));
+// dbService.settings({
+//   timestampsInSnapshots: true
+// });
 
-export { authService, dbService, uiConfig };
+// dbService
+//   .enablePersistence()
+//   .then(() => {
+//     dbService = firestore();
+//   })
+//   .catch(err => console.log(err));
+
+

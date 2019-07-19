@@ -1,5 +1,5 @@
 // Go to the firebase console to grab your config values
-export default {
+export const firebaseConfig = {
   apiKey: '',
   authDomain: '',
   databaseURL: '',
