@@ -1,5 +1,5 @@
 import firebase, { auth } from 'firebase';
-import { config } from '../../firebase.config';
+import { config } from './firebase.config';
 
 const uiConfig = {
   signInFlow: 'popup',

@@ -12,7 +12,7 @@ export type UpdatePayload = Omit<Partial<Todo>, 'id'>;
 
 export interface UseTodos {
   list: () => Todo[];
-  setFilter:(filter: Filter) => void;
+  setFilter: (filter: Filter) => void;
   add: (value: string) => void;
   remove: (id: string) => void;
   toggle: (id: string) => void;

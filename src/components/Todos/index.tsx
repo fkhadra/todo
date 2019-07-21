@@ -38,3 +38,5 @@ export const Todos: React.FC = () => {
     </TodosProvider>
   );
 };
+
+export default Todos;

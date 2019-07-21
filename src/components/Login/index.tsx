@@ -2,7 +2,7 @@ import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import styled from 'styled-components';
 
-import { uiConfig, firebaseAuth } from './firebase';
+import { uiConfig, firebaseAuth } from '../../firebase';
 
 const Container = styled.div`
   width: 360px;
@@ -26,3 +26,4 @@ export const Login: React.FC = () => (
   </Container>
 )
 
+export default Login;
