@@ -11,7 +11,8 @@ export interface Todo {
 export type UpdatePayload = Omit<Partial<Todo>, 'id'>;
 
 export interface UseTodos {
-  todos: Todo[];
+  list: () => Todo[];
+  setFilter:(filter: Filter) => void;
   add: (value: string) => void;
   remove: (id: string) => void;
   toggle: (id: string) => void;
@@ -22,7 +23,15 @@ const TodoContext = createContext<UseTodos>({} as UseTodos);
 
 export const useTodos = () => useContext(TodoContext);
 
+const applyFilter = {
+  ALL: (_todo: Todo) => true,
+  ACTIVE: (todo: Todo) => !todo.done,
+  DONE: (todo: Todo) => todo.done
+};
+export type Filter = keyof typeof applyFilter;
+
 export const TodosProvider: React.FC = props => {
+  const [filter, setFilter] = useState<Filter>('ALL');
   const [todoList, updateList] = useState<Todo[]>([]);
 
   function add(value: string) {
@@ -60,8 +69,13 @@ export const TodosProvider: React.FC = props => {
     );
   }
 
+  function list() {
+    return todoList.filter(applyFilter[filter]);
+  }
+
   const contextValue = {
-    todos: todoList,
+    list,
+    setFilter,
     add,
     remove,
     update,

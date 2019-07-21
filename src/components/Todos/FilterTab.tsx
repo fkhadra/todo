@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { listIcon, scheduleIcon, checkIcon } from '../../assets';
-import { Filter } from '.';
+import { useTodos, Filter } from '../../contexts';
 
 const Nav = styled.nav`
   display: flex;
@@ -24,19 +24,16 @@ const ActiveFilter = styled.div<{ position: number }>`
   transition: transform 0.4s;
 `;
 
-export interface FilterTabProps {
-  onFilterChange: (filter: Filter) => void;
-}
-
-export const FilterTab: React.FC<FilterTabProps> = ({ onFilterChange }) => {
+export const FilterTab: React.FC = () => {
   const ref = useRef<HTMLElement>(null);
   const [position, setPosition] = useState(0);
+  const { setFilter } = useTodos();
 
   function handleNavigation(e: React.SyntheticEvent) {
     const ratio = ref.current!.offsetWidth / 3;
     const currentPosition = Number(e.currentTarget.getAttribute('data-idx'));
     setPosition((ratio + ratio / 2 - 25) * currentPosition);
-    onFilterChange(e.currentTarget.getAttribute('data-filter') as Filter);
+    setFilter(e.currentTarget.getAttribute('data-filter') as Filter);
   }
 
   return (

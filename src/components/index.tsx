@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { TodosProvider } from '../contexts';
-import { TodoList } from './TodoList';
+import { Todos } from './Todos';
 import { Login } from './Login';
 import { useFirebaseAuth } from '../hooks';
 
@@ -15,8 +14,6 @@ export const App: React.FC = () => {
   return !user ? (
     <Login />
   ) : (
-    <TodosProvider>
-      <TodoList />
-    </TodosProvider>
+      <Todos />
   );
 };
