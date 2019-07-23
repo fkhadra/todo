@@ -38,15 +38,15 @@ export function useToggle(initialState = false) {
 
 export function useFirebaseAuth() {
   const [user, setUser] = useState<User | null>(null);
-  const [canRender, setRender] = useState(false);
+  const [waitingForAuthState, setAuthState] = useState(true);
 
   useEffect(() => {
     const unregisterAuthObserver = auth().onAuthStateChanged(firebaseUser => {
       setUser(firebaseUser);
-      setRender(true);
+      setAuthState(false);
     });
     return () => unregisterAuthObserver();
   }, []);
 
-  return {user, canRender};
+  return { user, waitingForAuthState };
 }
