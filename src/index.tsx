@@ -4,15 +4,17 @@ import 'normalize.css';
 
 //import { toast } from "react-toastify";
 //import registerServiceWorker from './registerServiceWorker';
-import "./firebase";
+import './firebase';
 import * as serviceWorker from './serviceWorker';
-
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
+import { AuthProvider } from './contexts';
 import { App } from './components';
 
 ReactDOM.render(
-    <App />,
+  <AuthProvider>
+    <App />
+  </AuthProvider>,
   document.getElementById('root')
 );
 serviceWorker.unregister();
