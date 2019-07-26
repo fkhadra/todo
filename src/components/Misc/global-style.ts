@@ -62,6 +62,14 @@ h3{
     opacity: 0;
   }
 }
+
+@keyframes fadeIn {
+  from{opacity: 0}
+  to {
+    opacity: 1;
+  } 
+}
+
 .todo-enter{
   animation-fill-mode: both;
   animation: slideInLeft 0.35s;

@@ -1,6 +1,6 @@
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { uiConfig, firebaseAuth } from '../../firebase';
 
@@ -14,6 +14,7 @@ const Container = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  animation: fadeIn .365s;
 `
 
 export const Login: React.FC = () => (

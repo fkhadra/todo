@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { AddTodo } from './AddTodo';
 import { Footer } from './Footer';
@@ -14,6 +14,7 @@ const Container = styled.section`
   flex-direction: column;
   max-width: 600px;
   margin: auto;
+  animation: fadeIn .365s;
   & header {
     display: flex;
     justify-content: center;

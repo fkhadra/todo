@@ -8,7 +8,7 @@ const AuthContext = React.createContext<UseAuth>({} as UseAuth);
 export const AuthProvider: React.FC = ({ children }) => {
   const { user, waitingForAuthState } = useFirebaseAuth();
 
-  if (waitingForAuthState) return <div>Loading...</div>;
+  if (waitingForAuthState) return null;
 
 
   return (
