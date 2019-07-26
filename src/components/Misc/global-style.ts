@@ -1,3 +1,6 @@
+import { createGlobalStyle } from 'styled-components';
+
+export const GlobalStyle = createGlobalStyle`
 body {
   margin: 0;
   padding: 0;
@@ -70,3 +73,4 @@ h3{
   transition: max-height 0.75s, opacity 0.75s, padding 0.75s;
   overflow: hidden;
 }
+`;
