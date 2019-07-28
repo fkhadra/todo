@@ -41,17 +41,41 @@ const Content = styled.div<{ isOpen: boolean }>`
   }
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+  width: 100%;
+  padding: 16px 0;
+
+  & img {
+    width: 70px;
+    border-radius: 50%;
+    vertical-align: middle;
+  }
+
+  & span {
+    margin: 0 12px;
+  }
+
+  & a {
+    padding: 8px;
+    cursor: pointer;
+  }
+`;
+
 const Menu: React.FC = ({ children }) => {
   const [isOpen, setState] = useState(false);
 
-  const close = () => {
-    isOpen && setState(false);
-  };
-
   useEffect(() => {
+    const close = () => {
+      isOpen && setState(false);
+    };
+
     document.addEventListener('click', close);
     return () => document.removeEventListener('click', close);
-  }, []);
+  }, [isOpen]);
 
   const toggle = (e: SyntheticEvent) => {
     e.nativeEvent.stopImmediatePropagation();
@@ -65,7 +89,7 @@ const Menu: React.FC = ({ children }) => {
     <Container>
       <img src={ellipsisIcon} alt="Menu" onClick={toggle} />
       <Content isOpen={isOpen} onClick={stopPropagation}>
-        {children}
+        <Wrapper>{children}</Wrapper>
       </Content>
     </Container>
   );

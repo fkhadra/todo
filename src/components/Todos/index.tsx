@@ -3,10 +3,12 @@ import styled, { keyframes } from 'styled-components';
 
 import { AddTodo } from './AddTodo';
 import { Footer } from './Footer';
-import { TodosProvider } from '../../contexts';
+import { TodosProvider, useAuth } from '../../contexts';
 
 import { FilterTab } from './FilterTab';
 import { TodoList } from './TodoList';
+import { Menu } from '../Misc';
+import { FirebaseAuth } from 'react-firebaseui';
 
 const Container = styled.section`
   height: 100vh;
@@ -25,11 +27,19 @@ const Container = styled.section`
 `;
 
 export const Todos: React.FC = () => {
+  const { getAvatar, getName } = useAuth();
   return (
     <TodosProvider>
       <Container>
         <header>
           <h1>To-Do</h1>
+          <Menu>
+              <div>
+                <img src={getAvatar()} alt="profile" />
+                <span>{getName()}</span>
+              </div>
+              <div><a>Sign Out</a></div>
+          </Menu>
         </header>
         <AddTodo />
         <FilterTab />

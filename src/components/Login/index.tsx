@@ -1,6 +1,6 @@
 import React from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { uiConfig, firebaseAuth } from '../../firebase';
 

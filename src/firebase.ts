@@ -1,4 +1,4 @@
-import firebase, { auth } from 'firebase';
+import firebase, { auth, firestore } from 'firebase';
 import { config } from './firebase.config';
 
 const uiConfig = {
@@ -23,18 +23,13 @@ if (!firebase.apps.length) {
 
 const firebaseAuth = auth();
 
-export { firebaseAuth, uiConfig };
-// let dbService = firestore();
+let dbService = firestore();
 
-// dbService.settings({
-//   timestampsInSnapshots: true
-// });
+dbService
+  .enablePersistence({ synchronizeTabs: true })
+  .then(() => {
+    dbService = firestore();
+  })
+  .catch(err => console.log(err));
 
-// dbService
-//   .enablePersistence()
-//   .then(() => {
-//     dbService = firestore();
-//   })
-//   .catch(err => console.log(err));
-
-
+export { firebaseAuth, uiConfig, dbService };
