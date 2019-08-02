@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFirebaseAuth } from '../hooks';
+import { auth, User } from 'firebase';
 
 export interface UseAuth {
   isAuthenticated: boolean;
@@ -10,13 +10,22 @@ export interface UseAuth {
 const AuthContext = React.createContext<UseAuth>({} as UseAuth);
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const { user, waitingForAuthState } = useFirebaseAuth();
+  const [user, setUser] = React.useState<User | null>(null);
+  const [waitingForAuthState, setAuthState] = React.useState(true);
+
+  React.useEffect(() => {
+    const unregisterAuthObserver = auth().onAuthStateChanged(firebaseUser => {
+      setUser(firebaseUser);
+      setAuthState(false);
+    });
+    return () => unregisterAuthObserver();
+  }, []);
 
   if (waitingForAuthState) return null;
 
   const signout = async () => {
     
-  }
+  };
 
   const getAvatar = () => {
     return user && user.photoURL ? user.photoURL : '';

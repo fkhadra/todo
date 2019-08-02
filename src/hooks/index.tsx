@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { auth, User } from 'firebase';
+import React, { useState } from 'react';
 
 export function useInput(initialValue = '') {
   const [value, setValue] = useState(initialValue);
@@ -36,17 +35,3 @@ export function useToggle(initialState = false) {
   };
 }
 
-export function useFirebaseAuth() {
-  const [user, setUser] = useState<User | null>(null);
-  const [waitingForAuthState, setAuthState] = useState(true);
-
-  useEffect(() => {
-    const unregisterAuthObserver = auth().onAuthStateChanged(firebaseUser => {
-      setUser(firebaseUser);
-      setAuthState(false);
-    });
-    return () => unregisterAuthObserver();
-  }, []);
-
-  return { user, waitingForAuthState };
-}
