@@ -1,4 +1,7 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext, useEffect } from 'react';
+
+import { dbService } from '../firebase';
+import { UserInfo } from './auth-context';
 
 export interface Todo {
   id: string;
@@ -8,7 +11,7 @@ export interface Todo {
   value: string;
 }
 
-export type UpdatePayload = Omit<Partial<Todo>, 'id'>;
+export type UpdatePayload = Partial<Todo>;
 
 export interface UseTodos {
   list: () => Todo[];
@@ -30,43 +33,61 @@ const applyFilter = {
 };
 export type Filter = keyof typeof applyFilter;
 
-export const TodosProvider: React.FC = props => {
+export const TodosProvider: React.FC<{ user: UserInfo }> = ({
+  user,
+  children
+}) => {
   const [filter, setFilter] = useState<Filter>('ALL');
   const [todoList, updateList] = useState<Todo[]>([]);
+  const collection = dbService
+    .collection('todoList')
+    .doc(user.id)
+    .collection('todos');
+  const genId = () => collection.doc().id;
 
-  function add(value: string) {
-    updateList([
-      {
-        id: Date.now().toString(24),
-        done: false,
-        createdAt: Date.now(),
-        updatedAt: null,
-        value: value
-      },
-      ...todoList
-    ]);
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  async function fetchTodos() {
+    const { empty, docs } = await collection.get();
+    if (!empty) updateList(docs.map(doc => doc.data()) as Todo[]);
   }
 
-  function remove(reqId: string) {
+  async function add(value: string) {
+    const todo = {
+      id: genId(),
+      done: false,
+      createdAt: Date.now(),
+      updatedAt: null,
+      value: value
+    };
+    updateList([todo, ...todoList]);
+
+    await collection.doc(todo.id).set(todo);
+  }
+
+  async function remove(reqId: string) {
     updateList(todoList.filter(({ id }) => id !== reqId));
+    await collection.doc(reqId).delete();
   }
 
-  function update(reqId: string, payload: UpdatePayload) {
+  async function update(reqId: string, payload: UpdatePayload) {
     updateList(
       todoList.map(todo => {
         if (todo.id === reqId) todo = { ...todo, ...payload };
         return todo;
       })
     );
+    await collection.doc(reqId).update(payload);
   }
 
   function toggle(reqId: string) {
-    updateList(
-      todoList.map(todo => {
-        if (todo.id === reqId) todo.done = !todo.done;
-        return todo;
-      })
-    );
+    const todo = todoList.find(todo => todo.id === reqId);
+    if (todo) {
+      todo.done = !todo.done;
+      update(reqId, todo);
+    }
   }
 
   function list() {
@@ -83,8 +104,6 @@ export const TodosProvider: React.FC = props => {
   };
 
   return (
-    <TodoContext.Provider value={contextValue}>
-      {props.children}
-    </TodoContext.Provider>
+    <TodoContext.Provider value={contextValue}>{children}</TodoContext.Provider>
   );
 };

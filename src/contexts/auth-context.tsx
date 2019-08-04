@@ -1,22 +1,30 @@
 import React from 'react';
 import { auth, User } from 'firebase';
 
+export interface UserInfo {
+  id: string;
+  avatar: string;
+  name: string;
+}
+
 export interface UseAuth {
   isAuthenticated: boolean;
-  getAvatar(): string;
-  getName(): string;
+  user: UserInfo;
   signOut(): void;
 }
 
 const AuthContext = React.createContext<UseAuth>({} as UseAuth);
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = React.useState<User | null>(null);
+  const [user, setUser] = React.useState<User>();
   const [waitingForAuthState, setAuthState] = React.useState(true);
+  let userInfo: UserInfo;
 
   React.useEffect(() => {
     const unregisterAuthObserver = auth().onAuthStateChanged(firebaseUser => {
-      setUser(firebaseUser);
+      if (firebaseUser) {
+        setUser(firebaseUser);
+      }
       setAuthState(false);
     });
     return () => unregisterAuthObserver();
@@ -28,24 +36,18 @@ export const AuthProvider: React.FC = ({ children }) => {
     await auth().signOut();
   };
 
-  const getAvatar = () => user && user.photoURL ? user.photoURL : '';
-
-  const getName = () => {
-    if (user) {
-      if (user.displayName) {
-        return user.displayName;
-      } else if (user.email) {
-        return user.email;
-      }
-    }
-    return 'anonymous';
-  };
+  if (user) {
+    userInfo = {
+      id: user.uid,
+      avatar: user.photoURL ? user.photoURL : '',
+      name: user.displayName || user.email!
+    };
+  }
 
   const contextValue = {
-    getAvatar,
-    getName,
-    signOut,
-    isAuthenticated: !!user
+    user: userInfo!,
+    isAuthenticated: !!user,
+    signOut
   };
 
   return (

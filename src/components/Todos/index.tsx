@@ -16,7 +16,7 @@ const Container = styled.section`
   flex-direction: column;
   max-width: 600px;
   margin: auto;
-  animation: fadeIn .365s;
+  animation: fadeIn 0.365s;
   & header {
     display: flex;
     justify-content: center;
@@ -27,18 +27,22 @@ const Container = styled.section`
 `;
 
 export const Todos: React.FC = () => {
-  const { getAvatar, getName, signOut } = useAuth();
+  const { user, signOut } = useAuth();
   return (
-    <TodosProvider>
+    <TodosProvider user={user}>
       <Container>
         <header>
           <h1>To-Do</h1>
           <Menu>
-              <div>
-                <img src={getAvatar()} alt="profile" />
-                <span>{getName()}</span>
-              </div>
-              <div><a href="#" onClick={signOut}>Sign Out</a></div>
+            <div>
+              <img src={user.avatar} alt="profile" />
+              <span>{user.name}</span>
+            </div>
+            <div>
+              <a href="#" onClick={signOut}>
+                Sign Out
+              </a>
+            </div>
           </Menu>
         </header>
         <AddTodo />
