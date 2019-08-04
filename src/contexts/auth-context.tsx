@@ -5,6 +5,7 @@ export interface UseAuth {
   isAuthenticated: boolean;
   getAvatar(): string;
   getName(): string;
+  signOut(): void;
 }
 
 const AuthContext = React.createContext<UseAuth>({} as UseAuth);
@@ -23,13 +24,11 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   if (waitingForAuthState) return null;
 
-  const signout = async () => {
-    
+  const signOut = async () => {
+    await auth().signOut();
   };
 
-  const getAvatar = () => {
-    return user && user.photoURL ? user.photoURL : '';
-  };
+  const getAvatar = () => user && user.photoURL ? user.photoURL : '';
 
   const getName = () => {
     if (user) {
@@ -45,6 +44,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const contextValue = {
     getAvatar,
     getName,
+    signOut,
     isAuthenticated: !!user
   };
 

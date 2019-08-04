@@ -27,7 +27,7 @@ const Container = styled.section`
 `;
 
 export const Todos: React.FC = () => {
-  const { getAvatar, getName } = useAuth();
+  const { getAvatar, getName, signOut } = useAuth();
   return (
     <TodosProvider>
       <Container>
@@ -38,7 +38,7 @@ export const Todos: React.FC = () => {
                 <img src={getAvatar()} alt="profile" />
                 <span>{getName()}</span>
               </div>
-              <div><a>Sign Out</a></div>
+              <div><a href="#" onClick={signOut}>Sign Out</a></div>
           </Menu>
         </header>
         <AddTodo />
