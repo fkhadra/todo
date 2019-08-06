@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { AddTodo } from './AddTodo';
 import { Footer } from './Footer';
@@ -8,7 +8,6 @@ import { TodosProvider, useAuth } from '../../contexts';
 import { FilterTab } from './FilterTab';
 import { TodoList } from './TodoList';
 import { Menu } from '../Misc';
-import { FirebaseAuth } from 'react-firebaseui';
 
 const Container = styled.section`
   height: 100vh;
