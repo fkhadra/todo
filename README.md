@@ -4,7 +4,7 @@
 
 ## Demo
 
-[https://todo.efka.io](https://todo.efka.io)
+[https://todo.fadi.io](https://todo.fadi.io)
 
 ## Features
 
@@ -14,20 +14,19 @@
 
 ## The tech stack
 
-- mobx
-- glamor
 - react
 - firebase authentication
 - firestore 
 - react-toastify
 - create-react-app
+- styled-components
 
 ## Usage
 
 Clone then run:
 
 ```js
-yarn install
+yarn 
 yarn start
 ```
 
