@@ -16,15 +16,13 @@ export interface UseAuth {
 const AuthContext = React.createContext<UseAuth>({} as UseAuth);
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = React.useState<User>();
+  const [user, setUser] = React.useState<User | null>();
   const [waitingForAuthState, setAuthState] = React.useState(true);
   let userInfo: UserInfo;
 
   React.useEffect(() => {
     const unregisterAuthObserver = auth().onAuthStateChanged(firebaseUser => {
-      if (firebaseUser) {
-        setUser(firebaseUser);
-      }
+      setUser(firebaseUser);
       setAuthState(false);
     });
     return () => unregisterAuthObserver();
