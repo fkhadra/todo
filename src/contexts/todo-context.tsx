@@ -47,6 +47,7 @@ export const TodosProvider: React.FC<{ user: UserInfo }> = ({
 
   useEffect(() => {
     fetchTodos();
+    // eslint-disable-next-line
   }, []);
 
   async function fetchTodos() {

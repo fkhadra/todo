@@ -25,6 +25,13 @@ const Container = styled.section`
   }
 `;
 
+const Signout = styled.button`
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+`;
+
 export const Todos: React.FC = () => {
   const { user, signOut } = useAuth();
   return (
@@ -38,9 +45,7 @@ export const Todos: React.FC = () => {
               <span>{user.name}</span>
             </div>
             <div>
-              <a href="#" onClick={signOut}>
-                Sign Out
-              </a>
+              <Signout onClick={signOut}>Sign out</Signout>
             </div>
           </Menu>
         </header>
